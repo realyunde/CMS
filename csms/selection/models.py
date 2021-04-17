@@ -28,6 +28,20 @@ class Course(models.Model):
     speciality = models.ForeignKey(Speciality, on_delete=models.CASCADE)
 
 
+# 管理员
+class Admin(models.Model):
+    id = models.CharField(max_length=32, primary_key=True, null=False)
+    name = models.CharField(max_length=32, unique=True, null=False)
+    password = models.CharField(max_length=32, null=False)
+
+    @classmethod
+    def get_object_by_name(cls, name):
+        try:
+            return cls.objects.get(name=name)
+        except cls.DoesNotExist:
+            return None
+
+
 # 学生
 class Student(models.Model):
     id = models.CharField(max_length=32, primary_key=True, null=False)

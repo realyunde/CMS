@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+    <title>学生选课管理系统</title>
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <div class="card-header text-center">登录</div>
+        {% if error %}
+        <!-- error information -->
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>错误：</strong> {{ error }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endif %}
+        <div class="card-body">
+            <form method="POST">
+                {% csrf_token %}
+                <!-- account -->
+                <div class="form-group form-row">
+                    <label for="account" class="text-center col-form-label col-2">用户</label>
+                    <div class="col-10">
+                        <input type="text" class="form-control" id="account" name="account" autofocus required>
+                    </div>
+                </div>
+                <!-- password -->
+                <div class="form-group form-row">
+                    <label for="password" class="text-center col-form-label col-2">密码</label>
+                    <div class="col-10">
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                </div>
+                <!-- role -->
+                <div class="from-group form-row">
+                    <label for="role" class="text-center col-form-label col-2">角色</label>
+                    <div class="col-10">
+                        <select id="role" class="custom-select" name="role" onchange="setDefaultRole(this.value);"
+                                required>
+                            <option value="teacher" selected>教师</option>
+                            <option value="student">学生</option>
+                            <option value="admin">管理员</option>
+                        </select>
+                    </div>
+                </div>
+                <!-- submit -->
+                <div class="text-center" style="margin-top: 3%; margin-left: 20%; margin-right: 20%;">
+                    <button type="submit" class="btn btn-block btn-primary">登录</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="/static/jquery/jquery.slim.min.js"></script>
+<script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript">
+function getDefaultRole()
+{
+    var name = "role=";
+    var ca = document.cookie.split(';');
+    for(var i=0; i<ca.length; i++)
+    {
+        var c = ca[i].trim();
+        if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+    }
+    return "";
+}
+
+function setDefaultRole(value)
+{
+    var d = new Date();
+    d.setTime(d.getTime() + (7 * 24 * 60 * 60 * 1000));
+    var expires = "expires=" + d.toGMTString();
+    document.cookie = "role=" + value + "; " + expires;
+}
+
+role = getDefaultRole();
+if (role)
+{
+    document.getElementById("role").value = role;
+}
+</script>
+</body>
+</html>

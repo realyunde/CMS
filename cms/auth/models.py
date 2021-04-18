@@ -36,6 +36,7 @@ class Teacher(models.Model):
     tno = models.CharField(max_length=32, primary_key=True, null=False)
     name = models.CharField(max_length=32, null=False)
     school = models.ForeignKey(School, on_delete=models.CASCADE)
+    password = models.CharField(max_length=64)
 
     @classmethod
     def get_by_tno(cls, tno):

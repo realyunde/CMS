@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import School, Speciality, Teacher, Course, Student, Selection, Administrator
+from .models import Student, Teacher, Administrator
 
 
 def auth_error(request):
@@ -11,7 +11,7 @@ def auth_error(request):
 
 
 def auth_student(request, account, password):
-    user = Student.objects.get(id=account)
+    user = Student.get_by_sno(account)
     if user is None or user.password != password:
         return auth_error(request)
     request.session['user'] = {
@@ -22,7 +22,7 @@ def auth_student(request, account, password):
 
 
 def auth_teacher(request, account, password):
-    user = Teacher.objects.get(id=account)
+    user = Teacher.get_by_tno(account)
     if user is None or user.password != password:
         return auth_error(request)
     request.session['user'] = {

@@ -12,7 +12,7 @@ def index(request):
 
         if not all((account, password, role)):
             context.setdefault('error', '不存在该用户或密码错误！')
-            return render(request, 'authentication/index.html', context)
+            return render(request, 'auth/index.html', context)
         if role == 'student':
             pass
         elif role == 'teacher':
@@ -21,7 +21,7 @@ def index(request):
             user = Admin.get_object_by_name(account)
             if user is None or user.password != password:
                 context.setdefault('error', '不存在该用户或密码错误！')
-                return render(request, 'authentication/index.html', context)
+                return render(request, 'auth/index.html', context)
             else:
                 request.session['role'] = role
                 request.session['account'] = account
@@ -30,8 +30,8 @@ def index(request):
         else:
             request.session.flush()
             context.setdefault('error', '不存在该用户或密码错误！')
-            return render(request, 'authentication/index.html', context)
+            return render(request, 'auth/index.html', context)
     elif request.method == 'GET':
         if request.session.get('logged'):
             return redirect('/admin/')
-    return render(request, 'authentication/index.html', context)
+    return render(request, 'auth/index.html', context)

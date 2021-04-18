@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.urls import path, include
 
-from csms.authentication.views import index
+from csms.auth.views import index
 
 urlpatterns = [
     path('', index),

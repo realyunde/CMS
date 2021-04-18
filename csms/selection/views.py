@@ -26,22 +26,15 @@ def index(request):
                 request.session['role'] = role
                 request.session['account'] = account
                 request.session['logged'] = True
-                return redirect('/superuser/')
+                return redirect('/administrator/')
         else:
             request.session.flush()
             context.setdefault('error', '不存在该用户或密码错误！')
             return render(request, 'selection/index.html', context)
     elif request.method == 'GET':
         if request.session.get('logged'):
-            return redirect('/superuser/')
+            return redirect('/administrator/')
     return render(request, 'selection/index.html', context)
-
-
-def superuser(request):
-    logged = request.session.get('logged')
-    if not logged:
-        redirect('/')
-    return render(request, 'selection/superuser.html')
 
 
 def student(request):

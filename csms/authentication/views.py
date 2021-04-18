@@ -26,12 +26,12 @@ def index(request):
                 request.session['role'] = role
                 request.session['account'] = account
                 request.session['logged'] = True
-                return redirect('/administrator/')
+                return redirect('/admin/')
         else:
             request.session.flush()
             context.setdefault('error', '不存在该用户或密码错误！')
             return render(request, 'authentication/index.html', context)
     elif request.method == 'GET':
         if request.session.get('logged'):
-            return redirect('/administrator/')
+            return redirect('/admin/')
     return render(request, 'authentication/index.html', context)

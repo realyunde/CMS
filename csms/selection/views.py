@@ -35,10 +35,3 @@ def index(request):
         if request.session.get('logged'):
             return redirect('/administrator/')
     return render(request, 'selection/index.html', context)
-
-
-def student(request):
-    logged = request.session.get('logged')
-    if not logged:
-        redirect('/')
-    return HttpResponse('student')

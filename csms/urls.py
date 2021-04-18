@@ -20,6 +20,6 @@ from csms.selection.views import index
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', index, name='index'),
+    path('', index),
     path('administrator/', include('csms.administrator.urls')),
 ]

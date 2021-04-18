@@ -1,4 +1,4 @@
-"""csms URL Configuration
+"""cms URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.2/topics/http/urls/
@@ -15,10 +15,10 @@ Including another URLconf
 """
 from django.urls import path, include
 
-from csms.auth.views import index
+from cms.auth.views import index
 
 urlpatterns = [
     path('', index),
-    path('admin/', include('csms.admin.urls')),
-    path('student/', include('csms.student.urls')),
+    path('admin/', include('cms.admin.urls')),
+    path('student/', include('cms.student.urls')),
 ]

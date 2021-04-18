@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class AuthenticationConfig(AppConfig):
+class AdministratorConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'csms.auth'
+    name = 'cms.admin'

@@ -30,7 +30,7 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'csms.auth.apps.AuthenticationConfig',
-    'csms.administrator.apps.AdministratorConfig',
+    'csms.admin.apps.AdministratorConfig',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',

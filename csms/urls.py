@@ -19,5 +19,5 @@ from csms.auth.views import index
 
 urlpatterns = [
     path('', index),
-    path('admin/', include('csms.administrator.urls')),
+    path('admin/', include('csms.admin.urls')),
 ]

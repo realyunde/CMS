@@ -18,7 +18,7 @@ def auth_error(request):
 
 
 def auth_student(request, account, password):
-    user = Student.get_by_sno(account)
+    user = Student.get_by_id(account)
     if user is None or user.password != password:
         return auth_error(request)
     login(request, 'student', account)
@@ -26,7 +26,7 @@ def auth_student(request, account, password):
 
 
 def auth_teacher(request, account, password):
-    user = Teacher.get_by_tno(account)
+    user = Teacher.get_by_id(account)
     if user is None or user.password != password:
         return auth_error(request)
     login(request, 'teacher', account)

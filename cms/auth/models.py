@@ -3,50 +3,51 @@ from django.db import models
 
 class School(models.Model):
     id = models.CharField(max_length=32, primary_key=True, null=False)
-    name = models.CharField(max_length=256, null=False)
+    name = models.CharField(max_length=255, null=False)
 
 
-class Speciality(models.Model):
+class Major(models.Model):
     id = models.CharField(max_length=32, primary_key=True, null=False)
-    name = models.CharField(max_length=256, null=False)
+    name = models.CharField(max_length=255, null=False)
     school = models.ForeignKey(School, on_delete=models.CASCADE)
 
 
 class Course(models.Model):
-    cno = models.CharField(max_length=32, primary_key=True, null=False)
-    name = models.CharField(max_length=256, null=False)
-    speciality = models.ForeignKey(Speciality, on_delete=models.CASCADE)
+    id = models.CharField(max_length=32, primary_key=True, null=False)
+    name = models.CharField(max_length=255, null=False)
+    speciality = models.ForeignKey(Major, on_delete=models.CASCADE)
 
 
 class Student(models.Model):
-    sno = models.CharField(max_length=12, primary_key=True, null=False)
+    id = models.CharField(max_length=32, primary_key=True, null=False)
     name = models.CharField(max_length=32, null=False)
-    speciality = models.ForeignKey(Speciality, on_delete=models.CASCADE, null=False)
+    major = models.ForeignKey(Major, on_delete=models.CASCADE, null=False)
     password = models.CharField(max_length=64)
 
     @classmethod
-    def get_by_sno(cls, sno):
+    def get_by_id(cls, _id):
         try:
-            return cls.objects.get(sno=sno)
+            return cls.objects.get(id=_id)
         except cls.DoesNotExist:
             return None
 
 
 class Teacher(models.Model):
-    tno = models.CharField(max_length=32, primary_key=True, null=False)
+    id = models.CharField(max_length=32, primary_key=True, null=False)
     name = models.CharField(max_length=32, null=False)
     school = models.ForeignKey(School, on_delete=models.CASCADE)
     password = models.CharField(max_length=64)
 
     @classmethod
-    def get_by_tno(cls, tno):
+    def get_by_id(cls, _id):
         try:
-            cls.objects.get(tno=tno)
+            cls.objects.get(id=_id)
         except cls.DoesNotExist:
             return None
 
 
 class Administrator(models.Model):
+    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=32, unique=True, null=False)
     password = models.CharField(max_length=64)
 

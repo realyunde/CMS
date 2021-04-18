@@ -34,11 +34,15 @@ def auth_teacher(request, account, password):
 
 
 def auth_admin(request, account, password):
-    if account == 'root' and password == 'root':
-        login(request, 'admin', account)
-        return redirect('admin_index')
-    user = Administrator.get_by_ano(account)
-    if user is None or user.password != password:
+    user = Administrator.get_by_name(account)
+    if user is None:
+        if account == 'root' and password == 'root':
+            user = Administrator(name=account, password=password)
+            user.save()
+            login(request, 'admin', account)
+            return redirect('admin_index')
+        return auth_error(request)
+    if user.password != password:
         return auth_error(request)
     login(request, 'admin', account)
     return redirect('admin_index')

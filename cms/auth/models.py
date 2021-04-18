@@ -47,14 +47,13 @@ class Teacher(models.Model):
 
 
 class Administrator(models.Model):
-    ano = models.CharField(max_length=32, primary_key=True, null=False)
-    name = models.CharField(max_length=32, null=False)
+    name = models.CharField(max_length=32, unique=True, null=False)
     password = models.CharField(max_length=64)
 
     @classmethod
-    def get_by_ano(cls, ano):
+    def get_by_name(cls, name):
         try:
-            return cls.objects.get(ano=ano)
+            return cls.objects.get(name=name)
         except cls.DoesNotExist:
             return None
 

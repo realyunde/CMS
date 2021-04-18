@@ -19,3 +19,7 @@ def logout(request):
     request.session.clear()
     request.session.flush()
     return redirect('/')
+
+
+def school(request):
+    return render(request, 'admin/school.html')

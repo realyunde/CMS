@@ -14,11 +14,10 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path, include
-
 from cms.auth.views import index
 
 urlpatterns = [
-    path('', index),
+    path('', index, name='auth_index'),
     path('admin/', include('cms.admin.urls')),
     path('student/', include('cms.student.urls')),
 ]

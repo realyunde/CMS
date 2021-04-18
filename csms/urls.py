@@ -16,9 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from csms.selection.views import index
+from csms.selection.views import index, student, superuser
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', index)
+    path('', index, name='index'),
+    path('superuser/', superuser, name='superuser'),
+    path('student/', student, name='student')
 ]

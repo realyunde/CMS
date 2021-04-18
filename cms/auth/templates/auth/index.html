@@ -3,7 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/fontawesome/css/all.min.css">
     <title>选课系统 | 登录</title>
 </head>
 <body>
@@ -13,7 +14,7 @@
         {% if error %}
         <!-- error information -->
         <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
-            <strong>错误：</strong> {{ error }}
+            <i class="fa fa-exclamation-triangle"></i>&nbsp;{{ error }}
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
@@ -24,22 +25,34 @@
                 {% csrf_token %}
                 <!-- account -->
                 <div class="form-group form-row">
-                    <label for="account" class="text-center col-form-label col-2">用户</label>
-                    <div class="col-10">
-                        <input type="text" class="form-control" id="account" name="account" autofocus required>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <i class="fa fa-user"></i>
+                            </div>
+                        </div>
+                        <input type="text" class="form-control" name="account" autofocus required>
                     </div>
                 </div>
                 <!-- password -->
                 <div class="form-group form-row">
-                    <label for="password" class="text-center col-form-label col-2">密码</label>
-                    <div class="col-10">
-                        <input type="password" class="form-control" id="password" name="password" required>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <i class="fa fa-lock"></i>
+                            </div>
+                        </div>
+                        <input type="password" class="form-control" name="password" required>
                     </div>
                 </div>
                 <!-- role -->
                 <div class="from-group form-row">
-                    <label for="role" class="text-center col-form-label col-2">角色</label>
-                    <div class="col-10">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <i class="fa fa-user-friends"></i>
+                            </div>
+                        </div>
                         <select id="role" class="custom-select" name="role" onchange="setDefaultRole(this.value);"
                                 required>
                             <option value="student" selected>学生</option>

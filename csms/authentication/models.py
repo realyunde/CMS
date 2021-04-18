@@ -10,7 +10,7 @@ class School(models.Model):
 # 专业
 class Speciality(models.Model):
     id = models.CharField(max_length=32, primary_key=True, null=False)
-    name = models.CharField(max_length=256, unique=True, null=False)
+    name = models.CharField(max_length=256, null=False)
     school = models.ForeignKey(School, on_delete=models.CASCADE)
 
 
@@ -24,7 +24,7 @@ class Teacher(models.Model):
 # 课程
 class Course(models.Model):
     id = models.CharField(max_length=32, primary_key=True, null=False)
-    name = models.CharField(max_length=256, unique=True, null=False)
+    name = models.CharField(max_length=256, null=False)
     speciality = models.ForeignKey(Speciality, on_delete=models.CASCADE)
 
 

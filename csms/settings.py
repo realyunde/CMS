@@ -29,7 +29,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    'csms.selection.apps.SelectionConfig',
+    'csms.authentication.apps.AuthenticationConfig',
     'csms.administrator.apps.AdministratorConfig',
     'django.contrib.admin',
     'django.contrib.auth',

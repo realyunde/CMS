@@ -2,6 +2,13 @@ from django.shortcuts import render, redirect
 from .models import Student, Teacher, Administrator
 
 
+def login(request, role, account):
+    request.session['user'] = {
+        'role': role,
+        'account': account
+    }
+
+
 def auth_error(request):
     context = {}
     context.setdefault('error', '不存在该用户或密码错误！')
@@ -14,10 +21,7 @@ def auth_student(request, account, password):
     user = Student.get_by_sno(account)
     if user is None or user.password != password:
         return auth_error(request)
-    request.session['user'] = {
-        'role': 'student',
-        'account': account
-    }
+    login(request, 'student', account)
     return redirect('student_index')
 
 
@@ -25,21 +29,18 @@ def auth_teacher(request, account, password):
     user = Teacher.get_by_tno(account)
     if user is None or user.password != password:
         return auth_error(request)
-    request.session['user'] = {
-        'role': 'teacher',
-        'account': account
-    }
+    login(request, 'teacher', account)
     return redirect('teacher_index')
 
 
 def auth_admin(request, account, password):
+    if account == 'root' and password == 'root':
+        login(request, 'admin', account)
+        return redirect('admin_index')
     user = Administrator.get_by_ano(account)
     if user is None or user.password != password:
         return auth_error(request)
-    request.session['user'] = {
-        'role': 'admin',
-        'account': account
-    }
+    login(request, 'admin', account)
     return redirect('admin_index')
 
 

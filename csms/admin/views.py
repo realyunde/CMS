@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect
 
 
 def index(request):
-    logged = request.session.get('logged')
-    if not logged:
+    user = request.session.get('user')
+    if not user:
         return redirect('/')
     return render(request, 'admin/index.html')
 
@@ -16,5 +16,6 @@ def settings(request):
 
 
 def logout(request):
+    request.session.clear()
     request.session.flush()
     return redirect('/')

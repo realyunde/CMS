@@ -42,8 +42,8 @@
                     <div class="col-10">
                         <select id="role" class="custom-select" name="role" onchange="setDefaultRole(this.value);"
                                 required>
-                            <option value="teacher" selected>教师</option>
-                            <option value="student">学生</option>
+                            <option value="student" selected>学生</option>
+                            <option value="teacher">教师</option>
                             <option value="admin">管理员</option>
                         </select>
                     </div>
@@ -84,6 +84,10 @@ if (role)
 {
     document.getElementById("role").value = role;
 }
+
+
+
+
 </script>
 </body>
 </html>

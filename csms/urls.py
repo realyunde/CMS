@@ -20,4 +20,5 @@ from csms.auth.views import index
 urlpatterns = [
     path('', index),
     path('admin/', include('csms.admin.urls')),
+    path('student/', include('csms.student.urls')),
 ]

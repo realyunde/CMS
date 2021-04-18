@@ -1,55 +1,63 @@
 from django.db import models
 
 
-# 学院
 class School(models.Model):
     id = models.CharField(max_length=32, primary_key=True, null=False)
     name = models.CharField(max_length=256, null=False)
 
 
-# 专业
 class Speciality(models.Model):
     id = models.CharField(max_length=32, primary_key=True, null=False)
     name = models.CharField(max_length=256, null=False)
     school = models.ForeignKey(School, on_delete=models.CASCADE)
 
 
-# 教师
-class Teacher(models.Model):
-    id = models.CharField(max_length=32, primary_key=True, null=False)
-    name = models.CharField(max_length=32, null=False)
-    school = models.ForeignKey(School, on_delete=models.CASCADE)
-
-
-# 课程
 class Course(models.Model):
-    id = models.CharField(max_length=32, primary_key=True, null=False)
+    cno = models.CharField(max_length=32, primary_key=True, null=False)
     name = models.CharField(max_length=256, null=False)
     speciality = models.ForeignKey(Speciality, on_delete=models.CASCADE)
 
 
-# 管理员
-class Admin(models.Model):
-    id = models.CharField(max_length=32, primary_key=True, null=False)
-    name = models.CharField(max_length=32, unique=True, null=False)
-    password = models.CharField(max_length=32, null=False)
+class Student(models.Model):
+    sno = models.CharField(max_length=12, primary_key=True, null=False)
+    name = models.CharField(max_length=32, null=False)
+    speciality = models.ForeignKey(Speciality, on_delete=models.CASCADE, null=False)
+    password = models.CharField(max_length=64)
 
     @classmethod
-    def get_object_by_name(cls, name):
+    def get_by_sno(cls, sno):
         try:
-            return cls.objects.get(name=name)
+            return cls.objects.get(sno=sno)
         except cls.DoesNotExist:
             return None
 
 
-# 学生
-class Student(models.Model):
-    id = models.CharField(max_length=32, primary_key=True, null=False)
+class Teacher(models.Model):
+    tno = models.CharField(max_length=32, primary_key=True, null=False)
     name = models.CharField(max_length=32, null=False)
-    speciality = models.ForeignKey(Speciality, on_delete=models.CASCADE)
+    school = models.ForeignKey(School, on_delete=models.CASCADE)
+
+    @classmethod
+    def get_by_tno(cls, tno):
+        try:
+            cls.objects.get(tno=tno)
+        except cls.DoesNotExist:
+            return None
 
 
-# 选课
+class Administrator(models.Model):
+    ano = models.CharField(max_length=32, primary_key=True, null=False)
+    name = models.CharField(max_length=32, null=False)
+    password = models.CharField(max_length=64)
+
+    @classmethod
+    def get_by_ano(cls, ano):
+        try:
+            return cls.objects.get(ano=ano)
+        except cls.DoesNotExist:
+            return None
+
+
 class Selection(models.Model):
     course_id = models.ForeignKey(Course, on_delete=models.CASCADE)
     student_id = models.ForeignKey(Student, on_delete=models.CASCADE)

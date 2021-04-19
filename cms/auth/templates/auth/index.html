@@ -9,8 +9,8 @@
 </head>
 <body>
 <div class="container">
-    <div class="card" style="margin-top: 10%; margin-left: 25%; margin-right: 25%;">
-        <div class="card-header text-center">登录</div>
+    <div class="card mx-auto" style="margin-top: 10%; width: 340px;">
+        <div class="card-header text-center">账号登录</div>
         {% if error %}
         <!-- error information -->
         <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
@@ -28,10 +28,10 @@
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <div class="input-group-text">
-                                <i class="fa fa-user"></i>
+                                <i class="fa fa-user fa-fw"></i>
                             </div>
                         </div>
-                        <input type="text" class="form-control" name="account" autofocus required>
+                        <input placeholder="用户" type="text" class="form-control form-control-sm" name="account" autofocus required>
                     </div>
                 </div>
                 <!-- password -->
@@ -39,10 +39,10 @@
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <div class="input-group-text">
-                                <i class="fa fa-lock"></i>
+                                <i class="fa fa-lock fa-fw"></i>
                             </div>
                         </div>
-                        <input type="password" class="form-control" name="password" required>
+                        <input placeholder="密码" type="password" class="form-control form-control-sm" name="password" required>
                     </div>
                 </div>
                 <!-- role -->
@@ -50,10 +50,10 @@
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <div class="input-group-text">
-                                <i class="fa fa-user-friends"></i>
+                                <i class="fa fa-id-card fa-fw"></i>
                             </div>
                         </div>
-                        <select id="role" class="custom-select" name="role" onchange="setDefaultRole(this.value);"
+                        <select id="role" class="custom-select custom-select-sm" name="role" onchange="setDefaultRole(this.value);"
                                 required>
                             <option value="student" selected>学生</option>
                             <option value="teacher">教师</option>
@@ -62,8 +62,8 @@
                     </div>
                 </div>
                 <!-- submit -->
-                <div class="text-center" style="margin-top: 3%; margin-left: 20%; margin-right: 20%;">
-                    <button type="submit" class="btn btn-block btn-primary">登录</button>
+                <div class="form-group form-row">
+                    <button type="submit" class="btn btn-block btn-sm btn-primary mt-4">登录</button>
                 </div>
             </form>
         </div>

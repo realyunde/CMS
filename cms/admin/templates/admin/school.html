@@ -16,8 +16,9 @@
                 <th class="text-center col-1" scope="col">
                     <input type="checkbox">
                 </th>
-                <th class="col-4" scope="col">学院代码</th>
-                <th class="col-4" scope="col">学院名称</th>
+                <th class="col-2" scope="col">#</th>
+                <th class="col-3" scope="col">学院代码</th>
+                <th class="col-3" scope="col">学院名称</th>
                 <th class="col-3" scope="col">操作</th>
             </tr>
             </thead>
@@ -27,8 +28,9 @@
                 <td class="text-center col-1">
                     <input type="checkbox" name="schoolIdList" value="{{ item.id }}">
                 </td>
-                <td class="col-4">{{ item.id }}</td>
-                <td class="col-4">{{ item.name }}</td>
+                <td class="col-2">{{ forloop.counter }}</td>
+                <td class="col-3">{{ item.id }}</td>
+                <td class="col-3">{{ item.name }}</td>
                 <td class="col-3">
                     <button class="btn btn-sm btn-warning">修改</button>
                     <button type="submit" class="btn btn-sm btn-danger">删除</button>
@@ -47,15 +49,27 @@
     <nav>
         <ul class="pagination justify-content-center">
             <li class="page-item">
-                <a class="page-link" href="?page=1" aria-label="Previous">
+                <a class="page-link" href="?keyword={{ page_keyword }}&page={{ page_prev }}" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
-            <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
-            <li class="page-item"><a class="page-link" href="?page=2">2</a></li>
-            <li class="page-item"><a class="page-link" href="?page=3">3</a></li>
+            {% for i in page_count %}
+            {% if i == page_now %}
+            <li class="page-item active">
+                <a class="page-link" href="?keyword={{ page_keyword }}&page={{ forloop.counter }}">
+                    {{ forloop.counter }}
+                </a>
+            </li>
+            {% else %}
+            <li class="page-item" aria-current="page">
+                <a class="page-link" href="?keyword={{ page_keyword }}&page={{ forloop.counter }}">
+                    {{ forloop.counter }}
+                </a>
+            </li>
+            {% endif %}
+            {% endfor %}
             <li class="page-item">
-                <a class="page-link" href="#" aria-label="Next">
+                <a class="page-link" href="?keyword={{ page_keyword }}&page={{ page_next }}" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>

@@ -1,28 +1,53 @@
 from django.shortcuts import render, redirect
-from ..auth.models import School
+from ..auth.models import School, Administrator
+
+
+def has_permission(request):
+    user = request.session.get('user')
+    if not user or user['role'] != 'admin':
+        return False
+    return True
 
 
 def index(request):
-    user = request.session.get('user')
-    if not user:
+    if not has_permission(request):
         return redirect('/')
     return render(request, 'admin/index.html')
 
 
 def settings(request):
-    if request.method == 'GET':
-        return render(request, 'admin/settings.html')
-    elif request.method == 'POST':
-        return render(request, 'admin/settings.html')
+    if not has_permission(request):
+        return redirect('/')
+    context = {}
+    if request.method == 'POST':
+        account = request.session.get('user')['account']
+        password = request.POST.get('password')
+        new_password1 = request.POST.get('newPassword1')
+        new_password2 = request.POST.get('newPassword2')
+        if new_password1 != new_password2:
+            context['notification'] = "两次密码不一致！"
+        else:
+            user = Administrator.get_by_name(account)
+            if user is None or user.password != password:
+                context['notification'] = "当前密码错误！"
+            else:
+                user.password = new_password1
+                user.save()
+                context['notification'] = "修改成功！"
+    return render(request, 'admin/settings.html', context)
 
 
 def logout(request):
+    if not has_permission(request):
+        return redirect('/')
     request.session.clear()
     request.session.flush()
     return redirect('/')
 
 
 def school(request):
+    if not has_permission(request):
+        return redirect('/')
     keyword = request.GET.get('keyword', '').strip()
     page = request.GET.get('page', 1)
     try:

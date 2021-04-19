@@ -23,6 +23,14 @@ def logout(request):
 
 
 def school(request):
+    keyword = request.GET.get('keyword', '').strip()
+    page = request.GET.get('keyword', 0)
+    try:
+        page = int(page) - 1
+        if page < 0:
+            page = 0
+    except ValueError:
+        page = 1
     context = {}
     if request.method == 'POST':
         action = request.POST.get('action')
@@ -39,5 +47,5 @@ def school(request):
             schools = request.POST.getlist('schoolIdList')
             print(schools)
     # get all schools
-    context['school_list'] = School.objects.all()
+    context['school_list'] = School.objects.filter(name__contains=f'{keyword}')
     return render(request, 'admin/school.html', context)

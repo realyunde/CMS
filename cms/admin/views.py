@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from ..auth.models import School
 
 
 def index(request):
@@ -22,4 +23,21 @@ def logout(request):
 
 
 def school(request):
-    return render(request, 'admin/school.html')
+    context = {}
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        if action == 'add':
+            school_id = request.POST.get('schoolId', '')
+            school_name = request.POST.get('schoolName', '')
+            if len(school_id) and len(school_name):
+                item = School(id=school_id, name=school_name)
+                item.save()
+                context['information'] = '添加成功！'
+            else:
+                context['information'] = '添加失败：学院代码或学院名称不符合要求'
+        if action == 'delete':
+            schools = request.POST.getlist('schoolIdList')
+            print(schools)
+    # get all schools
+    context['school_list'] = School.objects.all()
+    return render(request, 'admin/school.html', context)

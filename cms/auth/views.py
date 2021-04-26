@@ -2,6 +2,15 @@ from django.shortcuts import render, redirect
 from .models import Student, Teacher, Administrator
 
 
+def make_token(password):
+    import hashlib
+    salt = b''
+    if isinstance(password, str):
+        password = password.encode('utf-8')
+    md5 = hashlib.md5(salt + password)
+    return md5.hexdigest()
+
+
 def login(request, role, account):
     request.session['user'] = {
         'role': role,
@@ -34,15 +43,16 @@ def auth_teacher(request, account, password):
 
 
 def auth_admin(request, account, password):
+    token = make_token(password)
     user = Administrator.get_by_name(account)
     if user is None:
         if account == 'root' and password == 'root':
-            user = Administrator(name=account, password=password)
+            user = Administrator(name=account, token=token)
             user.save()
             login(request, 'admin', account)
             return redirect('admin_index')
         return auth_error(request)
-    if user.password != password:
+    if token != user.token:
         return auth_error(request)
     login(request, 'admin', account)
     return redirect('admin_index')

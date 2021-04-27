@@ -21,9 +21,6 @@
                 <a class="nav-link" href="{% url 'admin_school' %}">学院管理</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">专业管理</a>
-            </li>
-            <li class="nav-item">
                 <a class="nav-link" href="#">课程管理</a>
             </li>
             <li class="nav-item">
@@ -32,13 +29,6 @@
             <li class="nav-item">
                 <a class="nav-link" href="#">教师管理</a>
             </li>
-            <li class="nav-item my-auto">
-                <form class="form-inline mx-5" method="GET">
-                    <input class="form-control form-control-sm mr-sm-2" name="keyword" type="search"
-                           aria-label="Search">
-                    <button class="btn btn-outline-success btn-sm" type="submit">搜索</button>
-                </form>
-            </li>
         </ul>
         <div class="dropdown">
             <button class="btn btn-light dropdown-toggle" type="button" data-toggle="dropdown"
@@ -46,11 +36,13 @@
                 <i class="fa fa-user"></i>
             </button>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="{% url 'admin_settings' %}">
+                <span class="dropdown-item-text text-center">hello</span>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item text-center" href="{% url 'admin_settings' %}">
                     <i class="fa fa-cog"></i>&nbsp;设置
                 </a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="{% url 'admin_logout' %}">
+                <a class="dropdown-item text-center" href="{% url 'admin_logout' %}">
                     <i class="fa fa-sign-out-alt"></i>&nbsp;退出
                 </a>
             </div>

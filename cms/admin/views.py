@@ -45,7 +45,7 @@ def logout(request):
     return redirect('/')
 
 
-def school(request):
+def admin_school(request):
     if not has_permission(request):
         return redirect('/')
     keyword = request.GET.get('keyword', '').strip()
@@ -69,8 +69,11 @@ def school(request):
             else:
                 context['information'] = '添加失败：学院代码或学院名称不符合要求'
         if action == 'delete':
-            schools = request.POST.getlist('schoolIdList')
-            print(schools)
+            school_id = request.POST.get('schoolId')
+            school = School.get_by_id(school_id)
+            if school:
+                school.delete()
+            context['information'] = '已删除！'
     # get school list
     offset = (page - 1) * 10
     if len(keyword) == 0:

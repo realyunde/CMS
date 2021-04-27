@@ -13,22 +13,13 @@ class School(models.Model):
         max_length=255,
     )
 
-
-class Major(models.Model):
-    id = models.CharField(
-        null=False,
-        blank=False,
-        max_length=32,
-        primary_key=True,
-    )
-    name = models.CharField(
-        null=False,
-        max_length=255,
-    )
-    school = models.ForeignKey(
-        School,
-        on_delete=models.CASCADE,
-    )
+    @classmethod
+    def get_by_id(cls, _id):
+        try:
+            school = cls.objects.get(id=_id)
+        except cls.DoesNotExist:
+            school = None
+        return school
 
 
 class Course(models.Model):
@@ -38,8 +29,23 @@ class Course(models.Model):
         max_length=32,
         primary_key=True,
     )
-    name = models.CharField(max_length=255, null=False)
-    speciality = models.ForeignKey(Major, on_delete=models.CASCADE)
+    name = models.CharField(
+        null=False,
+        blank=False,
+        max_length=255,
+    )
+    school = models.ForeignKey(
+        School,
+        on_delete=models.CASCADE,
+    )
+
+    @classmethod
+    def get_by_id(cls, _id):
+        try:
+            course = cls.objects.get(id=_id)
+        except cls.DoesNotExist:
+            course = None
+        return course
 
 
 class Student(models.Model):
@@ -54,8 +60,8 @@ class Student(models.Model):
         blank=False,
         max_length=32,
     )
-    major = models.ForeignKey(
-        Major,
+    school = models.ForeignKey(
+        School,
         on_delete=models.CASCADE,
     )
     token = models.CharField(max_length=64)

@@ -16,43 +16,16 @@ class School(models.Model):
     @classmethod
     def get_by_id(cls, _id):
         try:
-            school = cls.objects.get(id=_id)
+            return cls.objects.get(id=_id)
         except cls.DoesNotExist:
-            school = None
-        return school
-
-
-class Course(models.Model):
-    id = models.CharField(
-        null=False,
-        blank=False,
-        max_length=32,
-        primary_key=True,
-    )
-    name = models.CharField(
-        null=False,
-        blank=False,
-        max_length=255,
-    )
-    school = models.ForeignKey(
-        School,
-        on_delete=models.CASCADE,
-    )
-
-    @classmethod
-    def get_by_id(cls, _id):
-        try:
-            course = cls.objects.get(id=_id)
-        except cls.DoesNotExist:
-            course = None
-        return course
+            return None
 
 
 class Student(models.Model):
     id = models.CharField(
         null=False,
         blank=False,
-        max_length=32,
+        max_length=12,
         primary_key=True,
     )
     name = models.CharField(
@@ -78,7 +51,7 @@ class Teacher(models.Model):
     id = models.CharField(
         null=False,
         blank=False,
-        max_length=32,
+        max_length=8,
         primary_key=True,
     )
     name = models.CharField(
@@ -95,7 +68,37 @@ class Teacher(models.Model):
     @classmethod
     def get_by_id(cls, _id):
         try:
-            cls.objects.get(id=_id)
+            return cls.objects.get(id=_id)
+        except cls.DoesNotExist:
+            return None
+
+
+class Course(models.Model):
+    id = models.CharField(
+        null=False,
+        blank=False,
+        max_length=32,
+        primary_key=True,
+    )
+    name = models.CharField(
+        null=False,
+        blank=False,
+        max_length=255,
+    )
+    teacher = models.ForeignKey(
+        Teacher,
+        null=True,
+        on_delete=models.SET_NULL,
+    )
+    school = models.ForeignKey(
+        School,
+        on_delete=models.CASCADE,
+    )
+
+    @classmethod
+    def get_by_id(cls, _id):
+        try:
+            return cls.objects.get(id=_id)
         except cls.DoesNotExist:
             return None
 
@@ -108,6 +111,13 @@ class Administrator(models.Model):
         max_length=32,
     )
     token = models.CharField(max_length=64)
+
+    @classmethod
+    def get_by_id(cls, _id):
+        try:
+            return cls.objects.get(id=_id)
+        except cls.DoesNotExist:
+            return None
 
     @classmethod
     def get_by_name(cls, name):

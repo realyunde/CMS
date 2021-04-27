@@ -34,12 +34,13 @@
         <tbody>
         {% if school_list %}
             {% for item in school_list %}
-                <tr class="row">
+                <tr class="row" id="schoolRow{{ forloop.counter }}">
                     <td class="col-2">{{ forloop.counter }}</td>
                     <td class="col-3">{{ item.id }}</td>
                     <td class="col-3">{{ item.name }}</td>
                     <td class="col-3">
                         <button class="btn btn-sm btn-warning mr-2" data-toggle="modal"
+                                onclick="editSchool('schoolRow{{ forloop.counter }}');"
                                 type="button" data-target="#editSchoolModal">
                             <i class="fa fa-edit fa-fw"></i>
                         </button>
@@ -124,6 +125,7 @@
         </div>
     </div>
 
+    <!-- edit -->
     <div class="modal fade" id="editSchoolModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -138,12 +140,12 @@
                         {% csrf_token %}
                         <input type="hidden" name="action" value="add">
                         <div class="form-group">
-                            <label for="schoolId" class="col-form-label">学院代码</label>
-                            <input type="text" name="schoolId" class="form-control" id="schoolId" required>
+                            <label for="editSchoolId" class="col-form-label">学院代码</label>
+                            <input type="text" name="schoolId" class="form-control" id="editSchoolId" readonly>
                         </div>
                         <div class="form-group">
-                            <label for="schoolName" class="col-form-label">学院名称</label>
-                            <input type="text" name="schoolName" class="form-control" id="schoolName" required>
+                            <label for="editSchoolName" class="col-form-label">学院名称</label>
+                            <input type="text" name="schoolName" class="form-control" id="editSchoolName" required>
                         </div>
                         <div class="form-group">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
@@ -170,6 +172,14 @@
             deleteSchoolFormSchoolId.value = schoolId;
             deleteSchoolForm.submit();
         }
+    }
+
+    function editSchool(rowId) {
+        let row = document.getElementById(rowId);
+        let id = row.children[1];
+        let name = row.children[2];
+        document.getElementById('editSchoolId').value = id.innerHTML;
+        document.getElementById('editSchoolName').value = name.innerHTML;
     }
 </script>
 {% include 'admin/footer.html' %}

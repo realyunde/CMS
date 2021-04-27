@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
-from ..auth.models import School, Administrator, Course
+from ..auth.models import School, Administrator, Course, Student
+from ..auth import make_token
 
 
 def has_permission(request):
@@ -68,12 +69,19 @@ def admin_school(request):
                 context['information'] = '添加成功！'
             else:
                 context['information'] = '添加失败：学院代码或学院名称不符合要求'
-        if action == 'delete':
+        elif action == 'delete':
             school_id = request.POST.get('schoolId')
             school = School.get_by_id(school_id)
             if school:
                 school.delete()
             context['information'] = '已删除！'
+        elif action == 'edit':
+            _id = request.POST.get('schoolId')
+            _name = request.POST.get('schoolName')
+            school = School.get_by_id(_id)
+            school.name = _name
+            school.save()
+            context['information'] = '已修改！'
     # get school list
     offset = (page - 1) * 10
     if len(keyword) == 0:
@@ -121,16 +129,11 @@ def admin_course(request):
                 context['information'] = '已删除！'
         elif action == 'edit':
             course_id = request.POST.get('courseId')
-            new_course_id = request.POST.get('newCourseId')
             course_name = request.POST.get('courseName')
-            course_school_id = request.POST.get('courseSchoolId')
+            school_id = request.POST.get('courseSchoolId')
             course = Course.get_by_id(course_id)
-            course.delete()
-            course = Course(
-                id=new_course_id,
-                name=course_name,
-                school=School.get_by_id(course_school_id),
-            )
+            course.name = course_name
+            course.school = School.get_by_id(school_id)
             course.save()
             context['information'] = '已修改！'
 
@@ -141,3 +144,50 @@ def admin_course(request):
     context['course_list'] = course_list
     context['school_list'] = School.objects.all()
     return render(request, 'admin/course.html', context)
+
+
+def admin_student(request):
+    context = {}
+    if not has_permission(request):
+        return redirect('/')
+    keyword = request.GET.get('keyword', '').strip()
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        if action == 'add':
+            _id = request.POST.get('studentId')
+            _name = request.POST.get('studentName')
+            _school_id = request.POST.get('studentSchoolId')
+            try:
+                item = Student(
+                    id=_id,
+                    name=_name,
+                    token=make_token(_id),
+                    school=School.get_by_id(_school_id),
+                )
+                item.save()
+                context['information'] = '添加成功！'
+            except:
+                context['information'] = '添加失败！'
+        elif action == 'delete':
+            _id = request.POST.get('studentId')
+            if _id:
+                student = Student.get_by_id(_id)
+                if student:
+                    student.delete()
+                context['information'] = '已删除！'
+        elif action == 'edit':
+            _id = request.POST.get('studentId')
+            _name = request.POST.get('studentName')
+            school_id = request.POST.get('studentSchoolId')
+            student = Student.get_by_id(_id)
+            student.name = _name
+            student.school = School.get_by_id(school_id)
+            student.save()
+            context['information'] = '已修改！'
+    if len(keyword) == 0:
+        student_list = Student.objects.all()
+    else:
+        student_list = Student.objects.filter(name__contains=keyword)
+    context['student_list'] = student_list
+    context['school_list'] = School.objects.all()
+    return render(request, 'admin/student.html', context)

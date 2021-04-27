@@ -1,34 +1,17 @@
 from django.shortcuts import render, redirect
 from .models import Student, Teacher, Administrator
-
-
-def make_token(password):
-    import hashlib
-    salt = b'cms_token'
-    if isinstance(password, str):
-        password = password.encode('utf-8')
-    md5 = hashlib.md5(salt + password)
-    return md5.hexdigest()
-
-
-def login(request, role, _id):
-    request.session['user'] = {
-        'role': role,
-        'id': _id
-    }
+from . import login, make_token
 
 
 def auth_error(request):
-    context = {}
-    context.setdefault('error', '不存在该用户或密码错误！')
-    request.session.clear()
-    request.session.flush()
+    context = {'error': '不存在该用户或密码错误！'}
     return render(request, 'auth/index.html', context)
 
 
 def auth_student(request, account, password):
+    token = make_token(password)
     user = Student.get_by_id(account)
-    if user is None or user.password != password:
+    if user is None or user.token != token:
         return auth_error(request)
     login(request, 'student', account)
     return redirect('student_index')

@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from ..auth.models import School, Administrator
+from ..auth.models import School, Administrator, Course
 
 
 def has_permission(request):
@@ -89,3 +89,55 @@ def admin_school(request):
     context['page_count'] = range(count)
     context['page_keyword'] = keyword
     return render(request, 'admin/school.html', context)
+
+
+def admin_course(request):
+    context = {}
+    if not has_permission(request):
+        return redirect('/')
+    keyword = request.GET.get('keyword', '').strip()
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        if action == 'add':
+            course_id = request.POST.get('courseId')
+            course_name = request.POST.get('courseName')
+            course_school_id = request.POST.get('courseSchoolId')
+            try:
+                item = Course(
+                    id=course_id,
+                    name=course_name,
+                    school=School.get_by_id(course_school_id),
+                )
+                item.save()
+                context['information'] = '添加成功！'
+            except:
+                context['information'] = '添加失败！'
+        elif action == 'delete':
+            course_id = request.POST.get('courseId')
+            if course_id:
+                course = Course.get_by_id(course_id)
+                if course:
+                    course.delete()
+                context['information'] = '已删除！'
+        elif action == 'edit':
+            course_id = request.POST.get('courseId')
+            new_course_id = request.POST.get('newCourseId')
+            course_name = request.POST.get('courseName')
+            course_school_id = request.POST.get('courseSchoolId')
+            course = Course.get_by_id(course_id)
+            course.delete()
+            course = Course(
+                id=new_course_id,
+                name=course_name,
+                school=School.get_by_id(course_school_id),
+            )
+            course.save()
+            context['information'] = '已修改！'
+
+    if len(keyword) == 0:
+        course_list = Course.objects.all()
+    else:
+        course_list = Course.objects.filter(name__contains=keyword)
+    context['course_list'] = course_list
+    context['school_list'] = School.objects.all()
+    return render(request, 'admin/course.html', context)

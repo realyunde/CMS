@@ -4,17 +4,17 @@ from .models import Student, Teacher, Administrator
 
 def make_token(password):
     import hashlib
-    salt = b''
+    salt = b'cms_token'
     if isinstance(password, str):
         password = password.encode('utf-8')
     md5 = hashlib.md5(salt + password)
     return md5.hexdigest()
 
 
-def login(request, role, account):
+def login(request, role, _id):
     request.session['user'] = {
         'role': role,
-        'account': account
+        'id': _id
     }
 
 

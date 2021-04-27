@@ -16,6 +16,14 @@ def login(request, role, user_id):
     }
 
 
+def get_current_user(request):
+    user = request.session.get('user')
+    if user is None:
+        return None
+    if user['role'] == 'admin':
+        pass
+
+
 def logout(request):
     request.session.clear()
     request.session.flush()

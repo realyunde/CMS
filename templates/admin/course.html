@@ -1,3 +1,12 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    {% include 'include/bootstrap/css.html' %}
+    {% include 'include/fontawesome/css.html' %}
+    <title>选课系统 | 管理员</title>
+</head>
+<body>
 {% include 'admin/include/header.html' %}
 
 <div class="container-fluid mt-5">
@@ -176,5 +185,6 @@
         document.getElementById('editCourseSchoolId').value = course_school_id.innerHTML;
     }
 </script>
-
-{% include 'admin/include/footer.html' %}
+{% include 'include/bootstrap/js.html' %}
+</body>
+</html>

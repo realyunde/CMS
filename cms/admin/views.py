@@ -14,18 +14,19 @@ def settings(request):
         return redirect('auth_index')
     context = {}
     if request.method == 'POST':
-        account = request.session.get('user')['account']
+        # POST data
         password = request.POST.get('password')
         new_password1 = request.POST.get('newPassword1')
         new_password2 = request.POST.get('newPassword2')
+        userid = auth.get_userid(request)
         if new_password1 != new_password2:
             context['notification'] = "两次密码不一致！"
         else:
-            user = Admin.get_by_name(account)
-            if user is None or user.password != password:
+            user = Admin.get_by_id(userid)
+            if user is None or auth.make_token(password) != user.token:
                 context['notification'] = "当前密码错误！"
             else:
-                user.password = new_password1
+                user.token = auth.make_token(new_password1)
                 user.save()
                 context['notification'] = "修改成功！"
     return render(request, 'admin/settings.html', context)

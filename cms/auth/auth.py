@@ -102,6 +102,16 @@ def is_student(request):
     return True
 
 
+#
+# get
+#
+def get_userid(request):
+    user = request.session.get(_SESSION_KEY)
+    if user is None:
+        return None
+    return user['id']
+
+
 def logout(request):
     request.session.clear()
     request.session.flush()

@@ -12,26 +12,26 @@
 
 <div class="container-fluid mt-5">
     {% if notification %}
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <strong></strong> {{ notification }}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
+        <div class="alert alert-danger alert-dismissible fade show mx-auto" style="max-width: 380px;" role="alert">
+            <strong></strong> {{ notification }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
     {% endif %}
     <form method="POST" class="mx-auto" style="max-width: 380px;">
         {% csrf_token %}
         <div class="form-group">
             <label for="password">当前密码</label>
-            <input type="password" name="password" class="form-control" id="password">
+            <input type="password" name="password" class="form-control" id="password" autofocus required>
         </div>
         <div class="form-group">
             <label for="newPassword1">新密码</label>
-            <input type="password" name="newPassword1" class="form-control" id="newPassword1">
+            <input type="password" name="newPassword1" class="form-control" id="newPassword1" required>
         </div>
         <div class="form-group">
             <label for="newPassword2">确认密码</label>
-            <input type="password" name="newPassword2" class="form-control" id="newPassword2">
+            <input type="password" name="newPassword2" class="form-control" id="newPassword2" required>
         </div>
         <button type="submit" class="btn btn-block btn-primary">修改</button>
     </form>

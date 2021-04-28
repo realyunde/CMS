@@ -1,24 +1,17 @@
 from django.shortcuts import render, redirect
-from cms.auth import make_token
+import cms.auth.auth as auth
 from cms.auth.models import Admin, Course, Student
 
 
-def has_permission(request):
-    user = request.session.get('user')
-    if not user or user['role'] != 'admin':
-        return False
-    return True
-
-
 def index(request):
-    if not has_permission(request):
-        return redirect('/')
+    if not auth.is_admin(request):
+        return redirect('auth_index')
     return render(request, 'admin/index.html')
 
 
 def settings(request):
-    if not has_permission(request):
-        return redirect('/')
+    if not auth.is_admin(request):
+        return redirect('auth_index')
     context = {}
     if request.method == 'POST':
         account = request.session.get('user')['account']
@@ -39,8 +32,8 @@ def settings(request):
 
 
 def logout(request):
-    if not has_permission(request):
-        return redirect('/')
+    if not auth.is_admin(request):
+        return redirect('auth_index')
     request.session.clear()
     request.session.flush()
     return redirect('/')
@@ -48,8 +41,8 @@ def logout(request):
 
 def admin_course(request):
     context = {}
-    if not has_permission(request):
-        return redirect('/')
+    if not auth.is_admin(request):
+        return redirect('auth_index')
     keyword = request.GET.get('keyword', '').strip()
     if request.method == 'POST':
         action = request.POST.get('action')
@@ -90,8 +83,8 @@ def admin_course(request):
 
 def admin_student(request):
     context = {}
-    if not has_permission(request):
-        return redirect('/')
+    if not auth.is_admin(request):
+        return redirect('auth_index')
     keyword = request.GET.get('keyword', '').strip()
     if request.method == 'POST':
         action = request.POST.get('action')
@@ -102,7 +95,7 @@ def admin_student(request):
                 item = Student(
                     id=_id,
                     name=_name,
-                    token=make_token(_id),
+                    token=auth.make_token(_id),
                 )
                 item.save()
                 context['information'] = '添加成功！'

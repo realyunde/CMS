@@ -29,9 +29,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    'cms.auth.apps.AuthenticationConfig',
-    'cms.admin.apps.AdministratorConfig',
-    'cms.student.apps.StudentConfig',
+    'cms.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',

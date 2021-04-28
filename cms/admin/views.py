@@ -50,11 +50,18 @@ def admin_course(request):
         if action == 'add':
             course_id = request.POST.get('courseId')
             course_name = request.POST.get('courseName')
+            teacher_id = request.POST.get('courseTeacher')
+            if len(teacher_id) == 0:
+                teacher = None
+            else:
+                teacher = Teacher.get_by_id(teacher_id)
             try:
                 item = Course(
                     id=course_id,
                     name=course_name,
                 )
+                if teacher:
+                    item.teacher = teacher
                 item.save()
                 context['information'] = '添加成功！'
             except:
@@ -69,8 +76,15 @@ def admin_course(request):
         elif action == 'edit':
             course_id = request.POST.get('courseId')
             course_name = request.POST.get('courseName')
+            teacher_id = request.POST.get('courseTeacher')
+            if len(teacher_id) == 0:
+                teacher = None
+            else:
+                teacher = Teacher.get_by_id(teacher_id)
             course = Course.get_by_id(course_id)
             course.name = course_name
+            if teacher:
+                course.teacher = teacher
             course.save()
             context['information'] = '已修改！'
 
@@ -79,6 +93,7 @@ def admin_course(request):
     else:
         course_list = Course.objects.filter(name__contains=keyword)
     context['course_list'] = course_list
+    context['teacher_list'] = Teacher.objects.all()
     return render(request, 'admin/course.html', context)
 
 

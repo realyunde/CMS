@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 import cms.auth.auth as auth
-from cms.auth.models import Admin, Course, Student
+from cms.auth.models import Admin, Course, Student, Teacher
 
 
 def index(request):
@@ -83,9 +83,9 @@ def admin_course(request):
 
 
 def admin_student(request):
-    context = {}
     if not auth.is_admin(request):
         return redirect('auth_index')
+    context = {}
     keyword = request.GET.get('keyword', '').strip()
     if request.method == 'POST':
         action = request.POST.get('action')
@@ -112,8 +112,11 @@ def admin_student(request):
         elif action == 'edit':
             _id = request.POST.get('studentId')
             _name = request.POST.get('studentName')
+            _password = request.POST.get('studentPassword')
             student = Student.get_by_id(_id)
             student.name = _name
+            if _password and len(_password) > 0:
+                student.token = auth.make_token(_password)
             student.save()
             context['information'] = '已修改！'
     if len(keyword) == 0:
@@ -122,3 +125,48 @@ def admin_student(request):
         student_list = Student.objects.filter(name__contains=keyword)
     context['student_list'] = student_list
     return render(request, 'admin/student.html', context)
+
+
+def admin_teacher(request):
+    if not auth.is_admin(request):
+        return redirect('auth_index')
+    context = {}
+    keyword = request.GET.get('keyword', '').strip()
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        if action == 'add':
+            _id = request.POST.get('teacherId')
+            _name = request.POST.get('teacherName')
+            try:
+                item = Teacher(
+                    id=_id,
+                    name=_name,
+                    token=auth.make_token(_id),
+                )
+                item.save()
+                context['information'] = '添加成功！'
+            except:
+                context['information'] = '添加失败！'
+        elif action == 'delete':
+            _id = request.POST.get('teacherId')
+            if _id:
+                teacher = Teacher.get_by_id(_id)
+                if teacher:
+                    teacher.delete()
+                context['information'] = '已删除！'
+        elif action == 'edit':
+            _id = request.POST.get('teacherId')
+            _name = request.POST.get('teacherName')
+            _password = request.POST.get('teacherPassword')
+            teacher = Teacher.get_by_id(_id)
+            teacher.name = _name
+            if _password and len(_password) > 0:
+                teacher.token = auth.make_token(_password)
+            teacher.save()
+            context['information'] = '已修改！'
+    if len(keyword) == 0:
+        teacher_list = Teacher.objects.all()
+    else:
+        teacher_list = Teacher.objects.filter(name__contains=keyword)
+    context['teacher_list'] = teacher_list
+    return render(request, 'admin/teacher.html', context)

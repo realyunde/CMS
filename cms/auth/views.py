@@ -51,6 +51,8 @@ def index(request):
                     user.save()
                     auth.login_admin(request, user.id)
                     return redirect('admin_index')
+                else:
+                    return error(request)
             else:
                 return check_admin(request, user.id, password)
         else:

@@ -37,10 +37,9 @@
         <thead>
         <tr class="row">
             <th class="col-1" scope="col">#</th>
-            <th class="col-3" scope="col">学号</th>
-            <th class="col-3" scope="col">姓名</th>
-            <th class="col-3" scope="col">学院</th>
-            <th class="col-2" scope="col">操作</th>
+            <th class="col-4" scope="col">学号</th>
+            <th class="col-4" scope="col">姓名</th>
+            <th class="col-3" scope="col">操作</th>
         </tr>
         </thead>
         <tbody>
@@ -48,13 +47,9 @@
             {% for item in student_list %}
                 <tr class="row" id="studentRow{{ forloop.counter }}">
                     <td class="col-1">{{ forloop.counter }}</td>
-                    <td class="col-3">{{ item.id }}</td>
-                    <td class="col-3">{{ item.name }}</td>
+                    <td class="col-4">{{ item.id }}</td>
+                    <td class="col-4">{{ item.name }}</td>
                     <td class="col-3">
-                        <span class="d-none">{{ item.school.id }}</span>
-                        {{ item.school.name }}
-                    </td>
-                    <td class="col-2">
                         <button class="btn btn-sm btn-warning mr-2" data-toggle="modal"
                                 onclick="editStudent('studentRow{{ forloop.counter }}');"
                                 type="button" data-target="#editStudentModal">
@@ -100,14 +95,6 @@
                             <input type="text" name="studentName" class="form-control" id="newStudentName" required>
                         </div>
                         <div class="form-group">
-                            <label for="newStudentSchool" class="col-form-label">学院</label>
-                            <select class="custom-select" name="studentSchoolId" id="newStudentSchool" required>
-                                {% for item in school_list %}
-                                    <option value="{{ item.id }}">{{ item.name }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="form-group">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
                             <button type="submit" class="btn btn-primary">添加</button>
                         </div>
@@ -140,14 +127,6 @@
                             <input type="text" name="studentName" class="form-control" id="editStudentName" required>
                         </div>
                         <div class="form-group">
-                            <label for="editStudentSchoolId" class="col-form-label">学院</label>
-                            <select class="custom-select" name="studentSchoolId" id="editStudentSchoolId" required>
-                                {% for item in school_list %}
-                                    <option value="{{ item.id }}">{{ item.name }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="form-group">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
                             <button type="submit" class="btn btn-primary">修改</button>
                         </div>
@@ -178,10 +157,8 @@
         let row = document.getElementById(rowId);
         let student_id = row.children[1];
         let student_name = row.children[2];
-        let student_school_id = row.children[3].children[0];
         document.getElementById('editStudentId').value = student_id.innerHTML;
         document.getElementById('editStudentName').value = student_name.innerHTML;
-        document.getElementById('editStudentSchoolId').value = student_school_id.innerHTML;
     }
 </script>
 {% include 'include/bootstrap/js.html' %}

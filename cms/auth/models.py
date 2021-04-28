@@ -1,26 +1,6 @@
 from django.db import models
 
 
-class School(models.Model):
-    id = models.CharField(
-        null=False,
-        blank=False,
-        max_length=32,
-        primary_key=True,
-    )
-    name = models.CharField(
-        null=False,
-        max_length=255,
-    )
-
-    @classmethod
-    def get_by_id(cls, _id):
-        try:
-            return cls.objects.get(id=_id)
-        except cls.DoesNotExist:
-            return None
-
-
 class Student(models.Model):
     id = models.CharField(
         null=False,
@@ -32,10 +12,6 @@ class Student(models.Model):
         null=False,
         blank=False,
         max_length=32,
-    )
-    school = models.ForeignKey(
-        School,
-        on_delete=models.CASCADE,
     )
     token = models.CharField(max_length=64)
 
@@ -58,10 +34,6 @@ class Teacher(models.Model):
         null=False,
         blank=False,
         max_length=32,
-    )
-    school = models.ForeignKey(
-        School,
-        on_delete=models.CASCADE,
     )
     token = models.CharField(max_length=64)
 
@@ -90,10 +62,6 @@ class Course(models.Model):
         null=True,
         on_delete=models.SET_NULL,
     )
-    school = models.ForeignKey(
-        School,
-        on_delete=models.CASCADE,
-    )
 
     @classmethod
     def get_by_id(cls, _id):
@@ -103,7 +71,7 @@ class Course(models.Model):
             return None
 
 
-class Administrator(models.Model):
+class Admin(models.Model):
     name = models.CharField(
         null=False,
         blank=False,
@@ -128,15 +96,16 @@ class Administrator(models.Model):
 
 
 class Selection(models.Model):
-    course_id = models.ForeignKey(
+    course = models.ForeignKey(
         Course,
         on_delete=models.CASCADE,
     )
-    student_id = models.ForeignKey(
+    student = models.ForeignKey(
         Student,
         on_delete=models.CASCADE,
     )
-    score = models.IntegerField()
+    score = models.IntegerField(default=None)
+    comment = models.TextField(default=None)
 
     class Meta:
-        unique_together = ('student_id', 'course_id')
+        unique_together = ('student', 'course')

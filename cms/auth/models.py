@@ -104,8 +104,16 @@ class Selection(models.Model):
         Student,
         on_delete=models.CASCADE,
     )
-    score = models.IntegerField(default=None)
-    comment = models.TextField(default=None)
+    score = models.IntegerField(
+        null=True,
+        blank=False,
+        default=None,
+    )
+    comment = models.TextField(
+        null=True,
+        blank=True,
+        default=None,
+    )
 
     class Meta:
         unique_together = ('student', 'course')

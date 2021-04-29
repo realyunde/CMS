@@ -61,7 +61,7 @@ def index(request):
         if auth.is_admin(request):
             return redirect('admin_index')
         elif auth.is_teacher(request):
-            pass
+            return redirect('teacher_index')
         elif auth.is_student(request):
             return redirect('student_index')
     return render(request, 'auth/index.html')

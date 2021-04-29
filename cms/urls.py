@@ -20,4 +20,5 @@ urlpatterns = [
     path('', index, name='auth_index'),
     path('admin/', include('cms.admin.urls')),
     path('student/', include('cms.student.urls')),
+    path('teacher/', include('cms.teacher.urls')),
 ]

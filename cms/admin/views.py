@@ -52,6 +52,9 @@ def admin_course(request):
             course_id = request.POST.get('courseId')
             course_name = request.POST.get('courseName')
             teacher_id = request.POST.get('courseTeacher')
+            description = request.POST.get('courseDescription')
+            if len(description) == 0:
+                description = None
             if len(teacher_id) == 0:
                 teacher = None
             else:
@@ -61,6 +64,7 @@ def admin_course(request):
                     id=course_id,
                     name=course_name,
                     teacher=teacher,
+                    description=description,
                 )
                 context['information'] = '添加成功！'
             except Exception as e:
@@ -76,14 +80,18 @@ def admin_course(request):
             course_id = request.POST.get('courseId')
             course_name = request.POST.get('courseName')
             teacher_id = request.POST.get('courseTeacher')
+            description = request.POST.get('courseDescription')
             if len(teacher_id) == 0:
                 teacher = None
             else:
                 teacher = Teacher.get_by_id(teacher_id)
+            if len(description) == 0:
+                description = None
             course = Course.get_by_id(course_id)
             if course:
                 course.name = course_name
                 course.teacher = teacher
+                course.description = description
                 course.save()
             context['information'] = '已修改！'
 

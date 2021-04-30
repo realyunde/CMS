@@ -55,12 +55,18 @@ class Course(models.Model):
     name = models.CharField(
         null=False,
         blank=False,
+        unique=True,
         max_length=255,
     )
     teacher = models.ForeignKey(
         Teacher,
         null=True,
         on_delete=models.SET_NULL,
+    )
+    description = models.TextField(
+        null=True,
+        blank=True,
+        default=None,
     )
 
     @classmethod

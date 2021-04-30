@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.db.models import Q
 import cms.auth.auth as auth
 from cms.auth.models import Admin, Course, Student, Teacher
 
@@ -56,16 +57,14 @@ def admin_course(request):
             else:
                 teacher = Teacher.get_by_id(teacher_id)
             try:
-                item = Course(
+                item = Course.objects.create(
                     id=course_id,
                     name=course_name,
+                    teacher=teacher,
                 )
-                if teacher:
-                    item.teacher = teacher
-                item.save()
                 context['information'] = '添加成功！'
-            except:
-                context['information'] = '添加失败！'
+            except Exception as e:
+                context['information'] = '添加失败！' + e.__str__()
         elif action == 'delete':
             course_id = request.POST.get('courseId')
             if course_id:
@@ -82,16 +81,18 @@ def admin_course(request):
             else:
                 teacher = Teacher.get_by_id(teacher_id)
             course = Course.get_by_id(course_id)
-            course.name = course_name
-            if teacher:
+            if course:
+                course.name = course_name
                 course.teacher = teacher
-            course.save()
+                course.save()
             context['information'] = '已修改！'
 
     if len(keyword) == 0:
         course_list = Course.objects.all()
     else:
-        course_list = Course.objects.filter(name__contains=keyword)
+        course_list = Course.objects.filter(
+            Q(id__contains=keyword) | Q(name__contains=keyword)
+        )
     context['course_list'] = course_list
     context['teacher_list'] = Teacher.objects.all()
     return render(request, 'admin/course.html', context)
@@ -108,15 +109,14 @@ def admin_student(request):
             _id = request.POST.get('studentId')
             _name = request.POST.get('studentName')
             try:
-                item = Student(
+                item = Student.objects.create(
                     id=_id,
                     name=_name,
                     token=auth.make_token(_id),
                 )
-                item.save()
                 context['information'] = '添加成功！'
-            except:
-                context['information'] = '添加失败！'
+            except Exception as e:
+                context['information'] = '添加失败！' + e.__str__()
         elif action == 'delete':
             _id = request.POST.get('studentId')
             if _id:
@@ -137,7 +137,9 @@ def admin_student(request):
     if len(keyword) == 0:
         student_list = Student.objects.all()
     else:
-        student_list = Student.objects.filter(name__contains=keyword)
+        student_list = Student.objects.filter(
+            Q(id__contains=keyword) | Q(name__contains=keyword)
+        )
     context['student_list'] = student_list
     return render(request, 'admin/student.html', context)
 
@@ -153,15 +155,14 @@ def admin_teacher(request):
             _id = request.POST.get('teacherId')
             _name = request.POST.get('teacherName')
             try:
-                item = Teacher(
+                item = Teacher.objects.create(
                     id=_id,
                     name=_name,
                     token=auth.make_token(_id),
                 )
-                item.save()
                 context['information'] = '添加成功！'
-            except:
-                context['information'] = '添加失败！'
+            except Exception as e:
+                context['information'] = '添加失败！' + e.__str__()
         elif action == 'delete':
             _id = request.POST.get('teacherId')
             if _id:
@@ -182,6 +183,8 @@ def admin_teacher(request):
     if len(keyword) == 0:
         teacher_list = Teacher.objects.all()
     else:
-        teacher_list = Teacher.objects.filter(name__contains=keyword)
+        teacher_list = Teacher.objects.filter(
+            Q(id__contains=keyword) | Q(name__contains=keyword)
+        )
     context['teacher_list'] = teacher_list
     return render(request, 'admin/teacher.html', context)

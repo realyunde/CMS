@@ -48,9 +48,7 @@
                     <td class="col-2">{{ item.id }}</td>
                     <td class="col-3">{{ item.name }}</td>
                     {% if item.teacher %}
-                        <td class="col-3">
-                            {{ item.teacher.name }}
-                        </td>
+                        <td class="col-3">{{ item.teacher.name }}</td>
                     {% else %}
                         <td class="col-3 text-danger">无</td>
                     {% endif %}

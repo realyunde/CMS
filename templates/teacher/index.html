@@ -9,7 +9,26 @@
 <body>
 {% include 'teacher/include/navbar.html' %}
 <div class="container-fluid">
-
+    <div class="row text-white mx-auto mt-5" style="max-width: 85%;">
+        <div class="card col mx-3 bg-info">
+            <div class="card-body">
+                <h5 class="card-title">{{ course_count }}</h5>
+                <p class="card-text">在教课程</p>
+            </div>
+            <div class="card-footer bg-info text-center">
+                <a class="card-link text-white" href="{% url 'teacher_course' %}">在教课程</a>
+            </div>
+        </div>
+        <div class="card col mx-3 bg-warning">
+            <div class="card-body">
+                <h5 class="card-title">{{ score_count }}</h5>
+                <p class="card-text">未录成绩</p>
+            </div>
+            <div class="card-footer bg-warning text-center">
+                <a class="card-link text-white" href="#">成绩录入</a>
+            </div>
+        </div>
+    </div>
 </div>
 {% include 'include/bootstrap/js.html' %}
 </body>

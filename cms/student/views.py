@@ -39,17 +39,20 @@ def select(request):
         if action == 'select':
             course_id = request.POST.get('courseId')
             userid = auth.get_userid(request)
-            selection = Selection(
-                course_id=course_id,
-                student_id=userid,
-            )
-            selection.save()
-            context['information'] = '选课成功！'
+            try:
+                selection = Selection.objects.create(
+                    course_id=course_id,
+                    student_id=userid,
+                )
+            except Exception as e:
+                context['information'] = '选课失败！' + e.__str__()
+            else:
+                context['information'] = '选课成功！' + Course.get_by_id(course_id).name
     keyword = request.GET.get('keyword', '').strip()
     userid = auth.get_userid(request)
     # selected_course = Selection.objects.filter(student_id=userid)
     course_list = Course.objects.exclude(
-        id__in=Selection.objects.filter(student_id=userid).values_list('course_id', flat=True),
+        id__in=Selection.objects.filter(student_id=userid).values('course_id'),
     )
     if len(keyword) > 0:
         course_list = course_list.filter(

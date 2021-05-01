@@ -54,7 +54,18 @@
                     {% else %}
                         <td class="col-3 text-danger">无</td>
                     {% endif %}
+
+                    <!-- description -->
+                    {% if item.description %}
+                        <td class="d-none">{{ item.description }}</td>
+                    {% else %}
+                        <td class="d-none"></td>
+                    {% endif %}
                     <td class="col-2">
+                        <button type="button" class="btn btn-sm btn-secondary"
+                                onclick="courseDetail('courseRow{{ forloop.counter }}');">
+                            详情
+                        </button>
                         <button type="button" class="btn btn-sm btn-primary"
                                 onclick="selectCourse('{{ item.id }}');">
                             选课
@@ -73,6 +84,43 @@
         </tbody>
     </table>
 
+    <!-- course detail modal -->
+    <div class="modal fade" id="courseDetailModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">课程详情</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="courseDetailId" class="col-form-label">课程代码</label>
+                        <input type="text" class="form-control" id="courseDetailId" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="courseDetailName" class="col-form-label">课程名称</label>
+                        <input type="text" class="form-control" id="courseDetailName" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="courseDetailTeacher" class="col-form-label">授课教师</label>
+                        <input type="text" class="form-control" id="courseDetailTeacher" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="courseDetailDescription" class="col-form-label">课程简介</label>
+                        <textarea type="text" class="form-control"
+                                  id="courseDetailDescription" readonly></textarea>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" id="courseDetailSelectButton">选课</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- select form -->
     <form method="POST" class="d-none" id="selectCourseForm">
         {% csrf_token %}
@@ -83,9 +131,18 @@
 {% include 'include/bootstrap/js.html' %}
 <script>
     function selectCourse(id) {
-        console.log(id);
         document.getElementById('selectCourseFormCourseId').value = id;
         document.getElementById('selectCourseForm').submit();
+    }
+
+    function courseDetail(id) {
+        let row = document.getElementById(id);
+        document.getElementById('courseDetailId').value = row.children[1].innerHTML;
+        document.getElementById('courseDetailName').value = row.children[2].innerHTML;
+        document.getElementById('courseDetailTeacher').value = row.children[3].innerHTML;
+        document.getElementById('courseDetailDescription').value = row.children[4].innerHTML;
+        document.getElementById('courseDetailSelectButton').onclick = row.children[5].children[1].onclick;
+        $('#courseDetailModal').modal();
     }
 </script>
 </body>

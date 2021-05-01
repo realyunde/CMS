@@ -7,7 +7,12 @@ from cms.auth.models import Admin, Course, Student, Teacher
 def index(request):
     if not auth.is_admin(request):
         return redirect('auth_index')
-    return render(request, 'admin/index.html')
+    context = {
+        'teacher_count': Teacher.objects.count(),
+        'course_count': Course.objects.count(),
+        'student_count': Student.objects.count()
+    }
+    return render(request, 'admin/index.html', context)
 
 
 def settings(request):

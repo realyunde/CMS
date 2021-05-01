@@ -75,6 +75,16 @@ def teacher_course(request):
     return render(request, 'teacher/course.html', context)
 
 
+def teacher_score(request):
+    if not auth.is_teacher(request):
+        return redirect('auth_index')
+    context = {}
+    userid = auth.get_userid(request)
+    context['username'] = Teacher.get_by_id(userid).name
+    keyword = request.GET.get('keyword', '').strip()
+    return render(request, 'teacher/score.html', context)
+
+
 def logout(request):
     auth.logout(request)
     return redirect('auth_index')

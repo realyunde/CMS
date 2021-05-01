@@ -10,6 +10,10 @@ def settings(request):
     return render(request, 'teacher/settings.html')
 
 
+def course(request):
+    return render(request, 'teacher/course.html')
+
+
 def logout(request):
     auth.logout(request)
     return redirect('auth_index')

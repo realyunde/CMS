@@ -7,10 +7,13 @@ from cms.auth.models import Admin, Course, Student, Teacher
 def index(request):
     if not auth.is_admin(request):
         return redirect('auth_index')
+    userid = auth.get_userid(request)
+    username = Admin.get_by_id(userid).name
     context = {
         'teacher_count': Teacher.objects.count(),
         'course_count': Course.objects.count(),
-        'student_count': Student.objects.count()
+        'student_count': Student.objects.count(),
+        'username': username,
     }
     return render(request, 'admin/index.html', context)
 
@@ -18,7 +21,11 @@ def index(request):
 def settings(request):
     if not auth.is_admin(request):
         return redirect('auth_index')
-    context = {}
+    userid = auth.get_userid(request)
+    username = Admin.get_by_id(userid).name
+    context = {
+        'username': username,
+    }
     if request.method == 'POST':
         # POST data
         password = request.POST.get('password')
@@ -47,9 +54,13 @@ def logout(request):
 
 
 def admin_course(request):
-    context = {}
     if not auth.is_admin(request):
         return redirect('auth_index')
+    userid = auth.get_userid(request)
+    username = Admin.get_by_id(userid).name
+    context = {
+        'username': username,
+    }
     keyword = request.GET.get('keyword', '').strip()
     if request.method == 'POST':
         action = request.POST.get('action')
@@ -114,7 +125,11 @@ def admin_course(request):
 def admin_student(request):
     if not auth.is_admin(request):
         return redirect('auth_index')
-    context = {}
+    userid = auth.get_userid(request)
+    username = Admin.get_by_id(userid).name
+    context = {
+        'username': username,
+    }
     keyword = request.GET.get('keyword', '').strip()
     if request.method == 'POST':
         action = request.POST.get('action')
@@ -160,7 +175,11 @@ def admin_student(request):
 def admin_teacher(request):
     if not auth.is_admin(request):
         return redirect('auth_index')
-    context = {}
+    userid = auth.get_userid(request)
+    username = Admin.get_by_id(userid).name
+    context = {
+        'username': username,
+    }
     keyword = request.GET.get('keyword', '').strip()
     if request.method == 'POST':
         action = request.POST.get('action')

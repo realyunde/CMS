@@ -73,6 +73,11 @@ def teacher_course(request):
         course_list = course_list.filter(
             Q(id__contains=keyword) | Q(name__contains=keyword)
         )
+    for item in course_list:
+        count = Selection.objects.filter(
+            course_id=item.id,
+        ).count()
+        item.student_count = count
     context['course_list'] = course_list
     return render(request, 'teacher/course.html', context)
 

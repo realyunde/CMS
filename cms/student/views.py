@@ -1,25 +1,39 @@
 from django.shortcuts import render, redirect
 from django.db.models import Q
 import cms.auth.auth as auth
-from cms.auth.models import Course, Selection
+from cms.auth.models import Course, Selection, Student
 
 
 def index(request):
     if not auth.is_student(request):
         return redirect('auth_index')
-    return render(request, 'student/index.html')
+    userid = auth.get_userid(request)
+    username = Student.get_by_id(userid).name
+    context = {
+        'username': username,
+    }
+    return render(request, 'student/index.html', context)
 
 
 def settings(request):
     if not auth.is_student(request):
         return redirect('auth_index')
-    return render(request, 'student/settings.html')
+    userid = auth.get_userid(request)
+    username = Student.get_by_id(userid).name
+    context = {
+        'username': username,
+    }
+    return render(request, 'student/settings.html', context)
 
 
 def select(request):
     if not auth.is_student(request):
         return redirect('auth_index')
-    context = {}
+    userid = auth.get_userid(request)
+    username = Student.get_by_id(userid).name
+    context = {
+        'username': username,
+    }
     if request.method == 'POST':
         action = request.POST.get('action')
         if action == 'select':
@@ -48,7 +62,11 @@ def select(request):
 def list_course(request):
     if not auth.is_student(request):
         return redirect('auth_index')
-    context = {}
+    userid = auth.get_userid(request)
+    username = Student.get_by_id(userid).name
+    context = {
+        'username': username,
+    }
     keyword = request.GET.get('keyword', '').strip()
     userid = auth.get_userid(request)
 

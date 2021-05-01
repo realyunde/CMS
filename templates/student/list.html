@@ -33,9 +33,9 @@
     <table class="table table-striped table-hover mx-auto mt-3" style="max-width: 75%;">
         <thead>
         <tr class="row">
-            <th class="col-2" scope="col">#</th>
+            <th class="col-1" scope="col">#</th>
             <th class="col-2" scope="col">课程代码</th>
-            <th class="col-2" scope="col">课程名称</th>
+            <th class="col-3" scope="col">课程名称</th>
             <th class="col-2" scope="col">授课老师</th>
             <th class="col-2" scope="col">成绩</th>
             <th class="col-2" scope="col">操作</th>
@@ -45,22 +45,24 @@
         {% if course_list %}
             {% for item in course_list %}
                 <tr class="row" id="listRow{{ forloop.counter }}">
-                    <td class="col-2">{{ forloop.counter }}</td>
+                    <td class="col-1">{{ forloop.counter }}</td>
                     <td class="col-2">{{ item.id }}</td>
-                    <td class="col-2">{{ item.name }}</td>
+                    <td class="col-3">{{ item.name }}</td>
                     {% if item.teacher %}
-                        <td class="col-2">
-                            {{ item.teacher.name }}
-                        </td>
+                        <td class="col-2">{{ item.teacher.name }}</td>
                     {% else %}
                         <td class="col-2 text-danger">无</td>
                     {% endif %}
                     {% if item.score %}
-                        <td class="col-2">
-                            {{ item.score }}
-                        </td>
+                        <td class="col-2">{{ item.score }}</td>
                     {% else %}
                         <td class="col-2 text-danger">无</td>
+                    {% endif %}
+                    <!-- description -->
+                    {% if item.description %}
+                        <td class="d-none">{{ item.description }}</td>
+                    {% else %}
+                        <td class="d-none"></td>
                     {% endif %}
                     <!-- comment -->
                     {% if item.comment %}
@@ -136,6 +138,11 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label for="commentCourseDescription" class="col-form-label">课程简介</label>
+                            <textarea class="form-control" name="courseComment"
+                                      id="commentCourseDescription" readonly></textarea>
+                        </div>
+                        <div class="form-group">
                             <label for="commentCourseContent" class="col-form-label">评价</label>
                             <textarea class="form-control"
                                       name="courseComment" id="commentCourseContent"></textarea>
@@ -161,12 +168,12 @@
 <script>
     function commentCourse(id) {
         let row = document.getElementById(id);
-        console.log(row);
         document.getElementById('commentCourseId').value = row.children[1].innerHTML;
         document.getElementById('commentCourseName').value = row.children[2].innerHTML;
         document.getElementById('commentCourseTeacher').value = row.children[3].innerHTML;
         document.getElementById('commentCourseScore').value = row.children[4].innerHTML;
-        document.getElementById('commentCourseContent').value = row.children[5].innerHTML;
+        document.getElementById('commentCourseDescription').value = row.children[5].innerHTML;
+        document.getElementById('commentCourseContent').value = row.children[6].innerHTML;
     }
 
     function withdrawCourse(id) {

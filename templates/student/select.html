@@ -34,10 +34,10 @@
         <thead>
         <tr class="row">
             <th class="col-1" scope="col">#</th>
-            <th class="col-3" scope="col">课程代码</th>
+            <th class="col-2" scope="col">课程代码</th>
             <th class="col-3" scope="col">课程名称</th>
             <th class="col-3" scope="col">授课老师</th>
-            <th class="col-2" scope="col">操作</th>
+            <th class="col-3" scope="col">操作</th>
         </tr>
         </thead>
         <tbody>
@@ -45,7 +45,7 @@
             {% for item in course_list %}
                 <tr class="row" id="courseRow{{ forloop.counter }}">
                     <td class="col-1">{{ forloop.counter }}</td>
-                    <td class="col-3">{{ item.id }}</td>
+                    <td class="col-2">{{ item.id }}</td>
                     <td class="col-3">{{ item.name }}</td>
                     {% if item.teacher %}
                         <td class="col-3">
@@ -61,7 +61,7 @@
                     {% else %}
                         <td class="d-none"></td>
                     {% endif %}
-                    <td class="col-2">
+                    <td class="col-3">
                         <button type="button" class="btn btn-sm btn-secondary"
                                 onclick="courseDetail('courseRow{{ forloop.counter }}');">
                             详情

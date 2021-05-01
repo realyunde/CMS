@@ -12,6 +12,14 @@ def index(request):
     context = {
         'username': username,
     }
+    list_count = Selection.objects.filter(
+        student_id=userid,
+    ).count()
+    course_count = Course.objects.exclude(
+        selection__student__id=userid,
+    ).count()
+    context['list_count'] = list_count
+    context['course_count'] = course_count
     return render(request, 'student/index.html', context)
 
 

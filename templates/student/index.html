@@ -9,7 +9,26 @@
 <body>
 {% include 'student/include/navbar.html' %}
 <div class="container-fluid">
-
+    <div class="row text-white mx-auto mt-5" style="max-width: 85%;">
+        <div class="card col mx-3 bg-info">
+            <div class="card-body">
+                <h5 class="card-title">{{ course_count }}</h5>
+                <p class="card-text">未选课程</p>
+            </div>
+            <div class="card-footer bg-info text-center">
+                <a class="card-link text-white" href="{% url 'student_select' %}">自主选课</a>
+            </div>
+        </div>
+        <div class="card col mx-3 bg-warning">
+            <div class="card-body">
+                <h5 class="card-title">{{ list_count }}</h5>
+                <p class="card-text">已选课程</p>
+            </div>
+            <div class="card-footer bg-warning text-center">
+                <a class="card-link text-white" href="{% url 'student_list_course' %}">已选课程</a>
+            </div>
+        </div>
+    </div>
 </div>
 {% include 'include/bootstrap/js.html' %}
 </body>

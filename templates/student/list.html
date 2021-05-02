@@ -46,10 +46,10 @@
             {% for item in course_list %}
                 <tr class="row" id="listRow{{ forloop.counter }}">
                     <td class="col-1">{{ forloop.counter }}</td>
-                    <td class="col-2">{{ item.id }}</td>
-                    <td class="col-3">{{ item.name }}</td>
-                    {% if item.teacher %}
-                        <td class="col-2">{{ item.teacher.name }}</td>
+                    <td class="col-2">{{ item.course.id }}</td>
+                    <td class="col-3">{{ item.course.name }}</td>
+                    {% if item.course.teacher %}
+                        <td class="col-2">{{ item.course.teacher.name }}</td>
                     {% else %}
                         <td class="col-2 text-danger">无</td>
                     {% endif %}

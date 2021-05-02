@@ -66,7 +66,7 @@ def select(request):
         if action == 'select':
             course_id = request.POST.get('courseId')
             try:
-                selection = Selection.objects.create(
+                Selection.objects.create(
                     course_id=course_id,
                     student_id=userid,
                 )
@@ -114,20 +114,13 @@ def list_course(request):
             selection.comment = comment
             selection.save()
             context['information'] = '评价已更新！'
+    course_list = Selection.objects.filter(
+        student_id=userid,
+    )
     if len(keyword) > 0:
-        course_list = Course.objects.raw(
-            "SELECT * "
-            "FROM auth_course "
-            "JOIN auth_selection "
-            "ON auth_course.id=auth_selection.course_id AND auth_selection.student_id='{0}' "
-            "WHERE auth_course.id LIKE '%{1}%' OR auth_course.name LIKE '%{1}%'".format(userid, keyword)
-        )
-    else:
-        course_list = Course.objects.raw(
-            "SELECT * "
-            "FROM auth_course "
-            "JOIN auth_selection "
-            "ON auth_course.id=auth_selection.course_id AND auth_selection.student_id='{}'".format(userid)
+        course_list = course_list.filter(
+            Q(course__id__contains=keyword) | Q(course__name__contains=keyword) | Q(
+                course__teacher__name__contains=keyword)
         )
     context['course_list'] = course_list
     return render(request, 'student/list.html', context)

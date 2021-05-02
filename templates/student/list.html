@@ -35,9 +35,9 @@
         <tr class="row">
             <th class="col-1" scope="col">#</th>
             <th class="col-2" scope="col">课程代码</th>
-            <th class="col-3" scope="col">课程名称</th>
+            <th class="col-4" scope="col">课程名称</th>
             <th class="col-2" scope="col">授课老师</th>
-            <th class="col-2" scope="col">成绩</th>
+            <th class="col-1" scope="col">成绩</th>
             <th class="col-2" scope="col">操作</th>
         </tr>
         </thead>
@@ -47,16 +47,16 @@
                 <tr class="row" id="listRow{{ forloop.counter }}">
                     <td class="col-1">{{ forloop.counter }}</td>
                     <td class="col-2">{{ item.course.id }}</td>
-                    <td class="col-3">{{ item.course.name }}</td>
+                    <td class="col-4">{{ item.course.name }}</td>
                     {% if item.course.teacher %}
                         <td class="col-2">{{ item.course.teacher.name }}</td>
                     {% else %}
                         <td class="col-2 text-danger">无</td>
                     {% endif %}
                     {% if item.score %}
-                        <td class="col-2">{{ item.score }}</td>
+                        <td class="col-1">{{ item.score }}</td>
                     {% else %}
-                        <td class="col-2 text-danger">无</td>
+                        <td class="col-1 text-danger">无</td>
                     {% endif %}
                     <!-- description -->
                     {% if item.description %}

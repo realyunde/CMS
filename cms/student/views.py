@@ -34,20 +34,18 @@ def index(request):
 @student_required
 def settings(request):
     userid = auth.get_userid(request)
-    username = Student.get_by_id(userid).name
+    user = Student.get_by_id(userid)
     context = {
-        'username': username,
+        'username': user.name,
     }
     if request.method == 'POST':
-        # POST data
         password = request.POST.get('password')
         new_password1 = request.POST.get('newPassword1')
         new_password2 = request.POST.get('newPassword2')
         if new_password1 != new_password2:
             context['information'] = "两次密码不一致！"
         else:
-            user = Student.get_by_id(userid)
-            if user is None or auth.make_token(password) != user.token:
+            if auth.make_token(password) != user.token:
                 context['information'] = "当前密码错误！"
             else:
                 user.token = auth.make_token(new_password1)
@@ -67,7 +65,6 @@ def select(request):
         action = request.POST.get('action')
         if action == 'select':
             course_id = request.POST.get('courseId')
-            userid = auth.get_userid(request)
             try:
                 selection = Selection.objects.create(
                     course_id=course_id,
@@ -78,8 +75,6 @@ def select(request):
             else:
                 context['information'] = '选课成功！' + Course.get_by_id(course_id).name
     keyword = request.GET.get('keyword', '').strip()
-    userid = auth.get_userid(request)
-    # selected_course = Selection.objects.filter(student_id=userid)
     course_list = Course.objects.exclude(
         id__in=Selection.objects.filter(student_id=userid).values('course_id'),
     )
@@ -99,8 +94,6 @@ def list_course(request):
         'username': username,
     }
     keyword = request.GET.get('keyword', '').strip()
-    userid = auth.get_userid(request)
-
     if request.method == 'POST':
         action = request.POST.get('action')
         if action == 'withdraw':

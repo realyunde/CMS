@@ -54,8 +54,7 @@ def settings(request):
 
 @admin_required
 def logout(request):
-    request.session.clear()
-    request.session.flush()
+    auth.logout(request)
     return redirect('auth_index')
 
 

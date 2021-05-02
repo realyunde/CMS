@@ -4,9 +4,17 @@ import cms.auth.auth as auth
 from cms.auth.models import Course, Selection, Student
 
 
+def student_required(handler):
+    def wrapper(request):
+        if not auth.is_student(request):
+            return redirect('auth_index')
+        return handler(request)
+
+    return wrapper
+
+
+@student_required
 def index(request):
-    if not auth.is_student(request):
-        return redirect('auth_index')
     userid = auth.get_userid(request)
     username = Student.get_by_id(userid).name
     context = {
@@ -23,9 +31,8 @@ def index(request):
     return render(request, 'student/index.html', context)
 
 
+@student_required
 def settings(request):
-    if not auth.is_student(request):
-        return redirect('auth_index')
     userid = auth.get_userid(request)
     username = Student.get_by_id(userid).name
     context = {
@@ -49,9 +56,8 @@ def settings(request):
     return render(request, 'student/settings.html', context)
 
 
+@student_required
 def select(request):
-    if not auth.is_student(request):
-        return redirect('auth_index')
     userid = auth.get_userid(request)
     username = Student.get_by_id(userid).name
     context = {
@@ -85,9 +91,8 @@ def select(request):
     return render(request, 'student/select.html', context)
 
 
+@student_required
 def list_course(request):
-    if not auth.is_student(request):
-        return redirect('auth_index')
     userid = auth.get_userid(request)
     username = Student.get_by_id(userid).name
     context = {
@@ -135,6 +140,7 @@ def list_course(request):
     return render(request, 'student/list.html', context)
 
 
+@student_required
 def logout(request):
     auth.logout(request)
     return redirect('auth_index')

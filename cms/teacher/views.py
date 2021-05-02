@@ -4,9 +4,17 @@ import cms.auth.auth as auth
 from cms.auth.models import Teacher, Course, Selection
 
 
+def teacher_required(handler):
+    def wrapper(request):
+        if not auth.is_teacher(request):
+            return redirect('auth_index')
+        return handler(request)
+
+    return wrapper
+
+
+@teacher_required
 def index(request):
-    if not auth.is_teacher(request):
-        return redirect('auth_index')
     context = {}
     userid = auth.get_userid(request)
     context['username'] = Teacher.get_by_id(userid).name
@@ -27,9 +35,8 @@ def index(request):
     return render(request, 'teacher/index.html', context)
 
 
+@teacher_required
 def settings(request):
-    if not auth.is_teacher(request):
-        return redirect('auth_index')
     context = {}
     userid = auth.get_userid(request)
     context['username'] = Teacher.get_by_id(userid).name
@@ -50,9 +57,8 @@ def settings(request):
     return render(request, 'teacher/settings.html', context)
 
 
+@teacher_required
 def teacher_course(request):
-    if not auth.is_teacher(request):
-        return redirect('auth_index')
     context = {}
     userid = auth.get_userid(request)
     context['username'] = Teacher.get_by_id(userid).name
@@ -82,9 +88,8 @@ def teacher_course(request):
     return render(request, 'teacher/course.html', context)
 
 
+@teacher_required
 def teacher_score(request):
-    if not auth.is_teacher(request):
-        return redirect('auth_index')
     context = {}
     userid = auth.get_userid(request)
     context['username'] = Teacher.get_by_id(userid).name
@@ -122,6 +127,7 @@ def teacher_score(request):
     return render(request, 'teacher/score.html', context)
 
 
+@teacher_required
 def logout(request):
     auth.logout(request)
     return redirect('auth_index')

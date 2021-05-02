@@ -80,7 +80,7 @@ def admin_course(request):
             else:
                 teacher = Teacher.get_by_id(teacher_id)
             try:
-                item = Course.objects.create(
+                Course.objects.create(
                     id=course_id,
                     name=course_name,
                     teacher=teacher,
@@ -119,7 +119,7 @@ def admin_course(request):
         course_list = Course.objects.all()
     else:
         course_list = Course.objects.filter(
-            Q(id__contains=keyword) | Q(name__contains=keyword)
+            Q(id__contains=keyword) | Q(name__contains=keyword) | Q(teacher__name__contains=keyword)
         )
     context['course_list'] = course_list
     context['teacher_list'] = Teacher.objects.all()
@@ -140,7 +140,7 @@ def admin_student(request):
             _id = request.POST.get('studentId')
             _name = request.POST.get('studentName')
             try:
-                item = Student.objects.create(
+                Student.objects.create(
                     id=_id,
                     name=_name,
                     token=auth.make_token(_id),
@@ -191,7 +191,7 @@ def admin_teacher(request):
             _id = request.POST.get('teacherId')
             _name = request.POST.get('teacherName')
             try:
-                item = Teacher.objects.create(
+                Teacher.objects.create(
                     id=_id,
                     name=_name,
                     token=auth.make_token(_id),

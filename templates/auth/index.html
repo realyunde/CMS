@@ -10,10 +10,9 @@
 <div class="container-fluid">
     <div class="card mx-auto" style="margin-top: 10%; max-width: 350px;">
         <div class="card-header text-center">账号登录</div>
-        {% if error %}
-            <!-- error information -->
+        {% if message %}
             <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
-                <i class="fa fa-exclamation-triangle"></i>&nbsp;{{ error }}
+                <i class="fa fa-exclamation-triangle"></i>&nbsp;{{ message }}
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

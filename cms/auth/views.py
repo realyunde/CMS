@@ -4,7 +4,7 @@ from . import auth
 
 
 def error(request):
-    context = {'error': '不存在该用户或密码错误！'}
+    context = {'message': '不存在该用户或密码错误！'}
     return render(request, 'auth/index.html', context)
 
 

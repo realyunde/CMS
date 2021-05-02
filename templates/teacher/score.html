@@ -47,10 +47,10 @@
             {% for item in course_list %}
                 <tr class="row" id="courseRow{{ forloop.counter }}">
                     <td class="col-1">{{ forloop.counter }}</td>
-                    <td class="col-2">{{ item.c_id }}</td>
-                    <td class="col-3">{{ item.c_name }}</td>
-                    <td class="col-2">{{ item.s_id }}</td>
-                    <td class="col-2">{{ item.s_name }}</td>
+                    <td class="col-2">{{ item.course.id }}</td>
+                    <td class="col-3">{{ item.course.name }}</td>
+                    <td class="col-2">{{ item.student.id }}</td>
+                    <td class="col-2">{{ item.student.name }}</td>
                     {% if item.score %}
                         <td class="col-1">{{ item.score }}</td>
                     {% else %}

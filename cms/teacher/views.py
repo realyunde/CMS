@@ -37,9 +37,11 @@ def index(request):
 
 @teacher_required
 def settings(request):
-    context = {}
     userid = auth.get_userid(request)
-    context['username'] = Teacher.get_by_id(userid).name
+    user = Teacher.get_by_id(userid)
+    context = {
+        'username': user.name,
+    }
     if request.method == 'POST':
         password = request.POST.get('password')
         new_password1 = request.POST.get('newPassword1')
@@ -47,7 +49,6 @@ def settings(request):
         if new_password1 != new_password2:
             context['information'] = '两次密码不一致！'
         else:
-            user = Teacher.get_by_id(userid)
             if auth.make_token(password) != user.token:
                 context['information'] = '原密码错误！'
             else:
@@ -95,7 +96,6 @@ def teacher_score(request):
     context['username'] = Teacher.get_by_id(userid).name
     keyword = request.GET.get('keyword', '').strip()
     if request.method == 'POST':
-        print(request.POST)
         action = request.POST.get('action')
         if action == 'edit':
             course_id = request.POST.get('courseId')
@@ -108,21 +108,14 @@ def teacher_score(request):
             item.score = score
             item.save()
             context['information'] = '修改成功！'
-    sql = "SELECT auth_selection.id as id, auth_course.id as c_id, auth_course.name as c_name," \
-          "auth_student.id as s_id, auth_student.name as s_name," \
-          "auth_selection.score as score, auth_selection.comment as comment " \
-          "FROM auth_course " \
-          "JOIN auth_selection " \
-          "JOIN auth_student " \
-          "ON auth_course.id=auth_selection.course_id " \
-          "AND auth_student.id=auth_selection.student_id " \
-          "AND auth_course.teacher_id='{}'".format(userid)
+    course_list = Selection.objects.filter(
+        course_id__in=Course.objects.filter(teacher_id=userid),
+    )
     if len(keyword) != 0:
-        sql += " WHERE auth_course.id LIKE '%{0}%'" \
-               " OR auth_course.name LIKE '%{0}%'" \
-               " OR auth_student.id LIKE '%{0}%'" \
-               " OR auth_student.name LIKE '%{0}%'".format(keyword)
-    course_list = Course.objects.raw(sql)
+        course_list = course_list.filter(
+            Q(course__id__contains=keyword) | Q(course__name__contains=keyword) | Q(student__id__contains=keyword) | Q(
+                student__name__contains=keyword)
+        )
     context['course_list'] = course_list
     return render(request, 'teacher/score.html', context)
 

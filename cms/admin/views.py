@@ -40,15 +40,15 @@ def settings(request):
         new_password2 = request.POST.get('newPassword2')
         userid = auth.get_userid(request)
         if new_password1 != new_password2:
-            context['notification'] = "两次密码不一致！"
+            context['message'] = "两次密码不一致！"
         else:
             user = Admin.get_by_id(userid)
             if user is None or auth.make_token(password) != user.token:
-                context['notification'] = "当前密码错误！"
+                context['message'] = "当前密码错误！"
             else:
                 user.token = auth.make_token(new_password1)
                 user.save()
-                context['notification'] = "修改成功！"
+                context['message'] = "修改成功！"
     return render(request, 'admin/settings.html', context)
 
 
@@ -86,16 +86,16 @@ def admin_course(request):
                     teacher=teacher,
                     description=description,
                 )
-                context['information'] = '添加成功！'
+                context['message'] = '添加成功！'
             except Exception as e:
-                context['information'] = '添加失败！' + e.__str__()
+                context['message'] = '添加失败！' + e.__str__()
         elif action == 'delete':
             course_id = request.POST.get('courseId')
             if course_id:
                 course = Course.get_by_id(course_id)
                 if course:
                     course.delete()
-                context['information'] = '已删除！'
+                context['message'] = '已删除！'
         elif action == 'edit':
             course_id = request.POST.get('courseId')
             course_name = request.POST.get('courseName')
@@ -113,7 +113,7 @@ def admin_course(request):
                 course.teacher = teacher
                 course.description = description
                 course.save()
-            context['information'] = '已修改！'
+            context['message'] = '已修改！'
 
     if len(keyword) == 0:
         course_list = Course.objects.all()
@@ -145,16 +145,16 @@ def admin_student(request):
                     name=_name,
                     token=auth.make_token(_id),
                 )
-                context['information'] = '添加成功！'
+                context['message'] = '添加成功！'
             except Exception as e:
-                context['information'] = '添加失败！' + e.__str__()
+                context['message'] = '添加失败！' + e.__str__()
         elif action == 'delete':
             _id = request.POST.get('studentId')
             if _id:
                 student = Student.get_by_id(_id)
                 if student:
                     student.delete()
-                context['information'] = '已删除！'
+                context['message'] = '已删除！'
         elif action == 'edit':
             _id = request.POST.get('studentId')
             _name = request.POST.get('studentName')
@@ -164,7 +164,7 @@ def admin_student(request):
             if _password and len(_password) > 0:
                 student.token = auth.make_token(_password)
             student.save()
-            context['information'] = '已修改！'
+            context['message'] = '已修改！'
     if len(keyword) == 0:
         student_list = Student.objects.all()
     else:
@@ -196,16 +196,16 @@ def admin_teacher(request):
                     name=_name,
                     token=auth.make_token(_id),
                 )
-                context['information'] = '添加成功！'
+                context['message'] = '添加成功！'
             except Exception as e:
-                context['information'] = '添加失败！' + e.__str__()
+                context['message'] = '添加失败！' + e.__str__()
         elif action == 'delete':
             _id = request.POST.get('teacherId')
             if _id:
                 teacher = Teacher.get_by_id(_id)
                 if teacher:
                     teacher.delete()
-                context['information'] = '已删除！'
+                context['message'] = '已删除！'
         elif action == 'edit':
             _id = request.POST.get('teacherId')
             _name = request.POST.get('teacherName')
@@ -215,7 +215,7 @@ def admin_teacher(request):
             if _password and len(_password) > 0:
                 teacher.token = auth.make_token(_password)
             teacher.save()
-            context['information'] = '已修改！'
+            context['message'] = '已修改！'
     if len(keyword) == 0:
         teacher_list = Teacher.objects.all()
     else:

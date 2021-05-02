@@ -9,9 +9,9 @@
 <body>
 {% include 'student/include/navbar.html' %}
 <div class="container-fluid mt-5">
-    {% if information %}
+    {% if message %}
         <div class="alert alert-danger alert-dismissible fade show mx-auto" style="max-width: 380px;" role="alert">
-            <strong></strong> {{ information }}
+            <strong></strong> {{ message }}
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>

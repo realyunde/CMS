@@ -47,14 +47,14 @@ def settings(request):
         new_password1 = request.POST.get('newPassword1')
         new_password2 = request.POST.get('newPassword2')
         if new_password1 != new_password2:
-            context['information'] = '两次密码不一致！'
+            context['message'] = '两次密码不一致！'
         else:
             if auth.make_token(password) != user.token:
-                context['information'] = '原密码错误！'
+                context['message'] = '原密码错误！'
             else:
                 user.token = auth.make_token(new_password1)
                 user.save()
-                context['information'] = '修改成功！'
+                context['message'] = '修改成功！'
     return render(request, 'teacher/settings.html', context)
 
 
@@ -72,7 +72,7 @@ def teacher_course(request):
             course = Course.get_by_id(course_id)
             course.description = description
             course.save()
-            context['information'] = '修改成功！'
+            context['message'] = '修改成功！'
     course_list = Course.objects.filter(
         teacher_id=userid,
     )
@@ -107,7 +107,7 @@ def teacher_score(request):
             )
             item.score = score
             item.save()
-            context['information'] = '修改成功！'
+            context['message'] = '修改成功！'
     course_list = Selection.objects.filter(
         course_id__in=Course.objects.filter(teacher_id=userid),
     )

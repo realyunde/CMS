@@ -43,14 +43,14 @@ def settings(request):
         new_password1 = request.POST.get('newPassword1')
         new_password2 = request.POST.get('newPassword2')
         if new_password1 != new_password2:
-            context['information'] = "两次密码不一致！"
+            context['message'] = "两次密码不一致！"
         else:
             if auth.make_token(password) != user.token:
-                context['information'] = "当前密码错误！"
+                context['message'] = "当前密码错误！"
             else:
                 user.token = auth.make_token(new_password1)
                 user.save()
-                context['information'] = "修改成功！"
+                context['message'] = "修改成功！"
     return render(request, 'student/settings.html', context)
 
 
@@ -71,9 +71,9 @@ def select(request):
                     student_id=userid,
                 )
             except Exception as e:
-                context['information'] = '选课失败！' + e.__str__()
+                context['message'] = '选课失败！' + e.__str__()
             else:
-                context['information'] = '选课成功！' + Course.get_by_id(course_id).name
+                context['message'] = '选课成功！' + Course.get_by_id(course_id).name
     keyword = request.GET.get('keyword', '').strip()
     course_list = Course.objects.exclude(
         id__in=Selection.objects.filter(student_id=userid).values('course_id'),
@@ -104,10 +104,10 @@ def list_course(request):
                     course_id=course_id,
                 )
             except Selection.DoesNotExist as e:
-                context['information'] = '操作失败！' + e.__str__()
+                context['message'] = '操作失败！' + e.__str__()
             else:
                 selection.delete()
-                context['information'] = '已退选！' + Course.get_by_id(course_id).name
+                context['message'] = '已退选！' + Course.get_by_id(course_id).name
         elif action == 'comment':
             course_id = request.POST.get('courseId')
             comment = request.POST.get('courseComment')
@@ -117,7 +117,7 @@ def list_course(request):
             )
             selection.comment = comment
             selection.save()
-            context['information'] = '评价已更新！'
+            context['message'] = '评价已更新！'
     course_list = Selection.objects.filter(
         student_id=userid,
     )

@@ -4,9 +4,17 @@ import cms.auth.auth as auth
 from cms.auth.models import Admin, Course, Student, Teacher
 
 
+def admin_required(handler):
+    def wrapper(request):
+        if not auth.is_admin(request):
+            return redirect('auth_index')
+        return handler(request)
+
+    return wrapper
+
+
+@admin_required
 def index(request):
-    if not auth.is_admin(request):
-        return redirect('auth_index')
     userid = auth.get_userid(request)
     username = Admin.get_by_id(userid).name
     context = {
@@ -18,9 +26,8 @@ def index(request):
     return render(request, 'admin/index.html', context)
 
 
+@admin_required
 def settings(request):
-    if not auth.is_admin(request):
-        return redirect('auth_index')
     userid = auth.get_userid(request)
     username = Admin.get_by_id(userid).name
     context = {
@@ -45,17 +52,15 @@ def settings(request):
     return render(request, 'admin/settings.html', context)
 
 
+@admin_required
 def logout(request):
-    if not auth.is_admin(request):
-        return redirect('auth_index')
     request.session.clear()
     request.session.flush()
-    return redirect('/')
+    return redirect('auth_index')
 
 
+@admin_required
 def admin_course(request):
-    if not auth.is_admin(request):
-        return redirect('auth_index')
     userid = auth.get_userid(request)
     username = Admin.get_by_id(userid).name
     context = {
@@ -122,9 +127,8 @@ def admin_course(request):
     return render(request, 'admin/course.html', context)
 
 
+@admin_required
 def admin_student(request):
-    if not auth.is_admin(request):
-        return redirect('auth_index')
     userid = auth.get_userid(request)
     username = Admin.get_by_id(userid).name
     context = {
@@ -172,6 +176,7 @@ def admin_student(request):
     return render(request, 'admin/student.html', context)
 
 
+@admin_required
 def admin_teacher(request):
     if not auth.is_admin(request):
         return redirect('auth_index')

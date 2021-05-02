@@ -80,7 +80,7 @@ def select(request):
     )
     if len(keyword) > 0:
         course_list = course_list.filter(
-            Q(id__contains=keyword) | Q(name__contains=keyword)
+            Q(id__contains=keyword) | Q(name__contains=keyword) | Q(teacher__name__contains=keyword)
         )
     context['course_list'] = course_list
     return render(request, 'student/select.html', context)

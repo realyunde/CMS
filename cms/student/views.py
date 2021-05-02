@@ -31,6 +31,21 @@ def settings(request):
     context = {
         'username': username,
     }
+    if request.method == 'POST':
+        # POST data
+        password = request.POST.get('password')
+        new_password1 = request.POST.get('newPassword1')
+        new_password2 = request.POST.get('newPassword2')
+        if new_password1 != new_password2:
+            context['information'] = "两次密码不一致！"
+        else:
+            user = Student.get_by_id(userid)
+            if user is None or auth.make_token(password) != user.token:
+                context['information'] = "当前密码错误！"
+            else:
+                user.token = auth.make_token(new_password1)
+                user.save()
+                context['information'] = "修改成功！"
     return render(request, 'student/settings.html', context)
 
 

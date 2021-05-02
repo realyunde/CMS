@@ -98,12 +98,16 @@ def list_course(request):
         action = request.POST.get('action')
         if action == 'withdraw':
             course_id = request.POST.get('courseId')
-            selection = Selection.objects.get(
-                student_id=userid,
-                course_id=course_id,
-            )
-            selection.delete()
-            context['information'] = '已退选！' + Course.get_by_id(course_id).name
+            try:
+                selection = Selection.objects.get(
+                    student_id=userid,
+                    course_id=course_id,
+                )
+            except Selection.DoesNotExist as e:
+                context['information'] = '操作失败！' + e.__str__()
+            else:
+                selection.delete()
+                context['information'] = '已退选！' + Course.get_by_id(course_id).name
         elif action == 'comment':
             course_id = request.POST.get('courseId')
             comment = request.POST.get('courseComment')

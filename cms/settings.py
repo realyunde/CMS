@@ -70,13 +70,10 @@ WSGI_APPLICATION = 'cms.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    'sqlite3': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'database/db.sqlite3',
-    },
     'mysql': {
         'ENGINE': 'django.db.backends.mysql',
-        'HOST': '192.168.41.137',
+        'HOST': 'localhost',
+        'PORT': '3306',
         'USER': 'cms',
         'NAME': 'cms',
         'PASSWORD': 'cms',

@@ -218,10 +218,12 @@ def admin_teacher(request):
             teacher.save()
             context['message'] = '已修改！'
     if len(keyword) == 0:
-        teacher_list = Teacher.objects.all().order_by(order_by)
+        teacher_list = Teacher.objects.all()
     else:
         teacher_list = Teacher.objects.filter(
             Q(id__contains=keyword) | Q(name__contains=keyword)
-        ).order_by(order_by)
+        )
+    if order_by in ('id', 'name'):
+        teacher_list = teacher_list.order_by(order_by)
     context['teacher_list'] = teacher_list
     return render(request, 'admin/teacher.html', context)

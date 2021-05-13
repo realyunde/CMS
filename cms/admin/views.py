@@ -185,6 +185,7 @@ def admin_teacher(request):
         'username': username,
     }
     keyword = request.GET.get('keyword', '').strip()
+    order_by = request.GET.get('orderBy', '').strip()
     if request.method == 'POST':
         action = request.POST.get('action')
         if action == 'add':
@@ -217,10 +218,10 @@ def admin_teacher(request):
             teacher.save()
             context['message'] = '已修改！'
     if len(keyword) == 0:
-        teacher_list = Teacher.objects.all()
+        teacher_list = Teacher.objects.all().order_by(order_by)
     else:
         teacher_list = Teacher.objects.filter(
             Q(id__contains=keyword) | Q(name__contains=keyword)
-        )
+        ).order_by(order_by)
     context['teacher_list'] = teacher_list
     return render(request, 'admin/teacher.html', context)

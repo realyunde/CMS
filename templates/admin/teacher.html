@@ -24,6 +24,10 @@
         <div class="col-12 text-center">
             <form class="d-inline form-inline" method="GET">
                 <input class="form-control form-control-sm" name="keyword" type="search">
+                <select name="orderBy" class="custom-select custom-select-sm">
+                    <option value="id" selected>工号</option>
+                    <option value="name">姓名</option>
+                </select>
                 <button class="btn btn-outline-success btn-sm" type="submit">搜索</button>
             </form>
             <button class="btn btn-sm btn-success ml-5" data-toggle="modal" data-target="#addTeacherModal">
@@ -62,11 +66,8 @@
                 </tr>
             {% endfor %}
         {% else %}
-            <tr class="text-center">
-                <td>
-                    查询结果为空！
-                    <i class="fa fa-exclamation-circle text-warning"></i>
-                </td>
+            <tr class="row text-center">
+                <td class="col">查询结果为空！<i class="fa fa-exclamation-circle text-warning"></i></td>
             </tr>
         {% endif %}
         </tbody>

@@ -66,6 +66,7 @@ def admin_course(request):
         'username': username,
     }
     keyword = request.GET.get('keyword', '').strip()
+    order_by = request.GET.get('orderBy', '').strip()
     if request.method == 'POST':
         action = request.POST.get('action')
         if action == 'add':
@@ -121,6 +122,8 @@ def admin_course(request):
         course_list = Course.objects.filter(
             Q(id__contains=keyword) | Q(name__contains=keyword) | Q(teacher__name__contains=keyword)
         )
+    if order_by in ('id', 'name'):
+        course_list = course_list.order_by(order_by)
     context['course_list'] = course_list
     context['teacher_list'] = Teacher.objects.all()
     return render(request, 'admin/course.html', context)
